@@ -258,3 +258,103 @@ def list_activities(
         "total": total,
         "items": logs
     }
+
+
+@app.get("/api/dashboard/stats", response_model=DashboardStats, tags=["Dashboard"])
+def get_dashboard_stats(context: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    items_query = db.query(InventoryItem)
+    if context and context != "all":
+        items_query = items_query.filter(or_(InventoryItem.context_tag == context, InventoryItem.context_tag == "general"))
+
+    items = items_query.all()
+    total_items = len(items)
+    low_stock_count = sum(1 for i in items if 0 < i.quantity <= i.reorder_level)
+    critical_count = sum(1 for i in items if i.quantity <= 0)
+    total_valuation = round(sum(i.quantity * i.unit_price for i in items), 2)
+
+    # Activity logs (most recent 10)
+    recent_logs = db.query(ActivityLog).order_by(ActivityLog.timestamp.desc()).limit(10).all()
+
+    # Calculate today's outflow
+    one_day_ago = datetime.utcnow() - timedelta(days=1)
+    today_logs = db.query(ActivityLog).filter(
+        ActivityLog.timestamp >= one_day_ago,
+        ActivityLog.action_type.in_(["RELIEF_DISTRIBUTION", "SALE"])
+    ).all()
+    total_outflow_today = sum(abs(l.quantity_change) for l in today_logs)
+
+    # Generate 7-day throughput velocity points
+    now = datetime.utcnow()
+    throughput = []
+    for day_offset in range(6, -1, -1):
+        day_date = now - timedelta(days=day_offset)
+        day_start = datetime(day_date.year, day_date.month, day_date.day)
+        day_end = day_start + timedelta(days=1)
+
+        day_logs = db.query(ActivityLog).filter(
+            ActivityLog.timestamp >= day_start,
+            ActivityLog.timestamp < day_end
+        ).all()
+
+        intake = sum(l.quantity_change for l in day_logs if l.action_type in ["RESTOCK", "ITEM_CREATED"])
+        outflow = sum(abs(l.quantity_change) for l in day_logs if l.action_type in ["RELIEF_DISTRIBUTION", "SALE"])
+
+        throughput.append({
+            "day": day_date.strftime("%a"),
+            "intake": intake,
+            "outflow": outflow
+        })
+
+    return {
+        "total_items": total_items,
+        "low_stock_count": low_stock_count,
+        "critical_count": critical_count,
+        "total_valuation": total_valuation,
+        "total_outflow_today": total_outflow_today,
+        "recent_activities": recent_logs,
+        "throughput_curve": throughput
+    }
+
+
+@app.get("/api/export/csv", tags=["Export"])
+def export_csv(context: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    query = db.query(InventoryItem)
+    if context and context != "all":
+        query = query.filter(or_(InventoryItem.context_tag == context, InventoryItem.context_tag == "general"))
+
+    items = query.order_by(InventoryItem.id.asc()).all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Item ID", "SKU", "Item Name", "Category", "Context", "Quantity", "Reorder Level", "Unit Price", "Total Valuation", "Status"])
+
+    for i in items:
+        writer.writerow([
+            i.id,
+            i.sku,
+            i.name,
+            i.category,
+            i.context_tag.upper(),
+            i.quantity,
+            i.reorder_level,
+            f"{i.unit_price:.2f}",
+            f"{(i.quantity * i.unit_price):.2f}",
+            i.status
+        ])
+
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=ResourceOne_Inventory_Report.csv"}
+    )
+
+
+@app.post("/api/seed", tags=["System"])
+def reseed(db: Session = Depends(get_db)):
+    """Clear and re-seed sample items."""
+    db.query(ActivityLog).delete()
+    db.query(InventoryItem).delete()
+    db.commit()
+    count = seed_database()
+    return {"message": f"Successfully seeded {count} items."}
