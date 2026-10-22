@@ -1,13 +1,3 @@
-// function App() {
-//   return (
-//     <div>
-//       <h1>ResourceOne</h1>
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
