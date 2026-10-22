@@ -10,7 +10,7 @@ export default function AboutModal({ isOpen, onClose }) {
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}a
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="relative w-full max-w-2xl rounded-3xl coffee-glass p-6 sm:p-7 shadow-2xl border max-h-[90vh] overflow-y-auto"
