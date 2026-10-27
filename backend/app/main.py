@@ -24,13 +24,17 @@ from app.seed import seed_database
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Ensure tables exist (helpful for in-memory and local SQLite development)
-    Base.metadata.create_all(bind=engine)
-    if settings.SEED_DEMO:
+    # Only initialize DB if not in test environment or if engine is accessible
+    if settings.ENVIRONMENT != "testing":
         try:
-            seed_database()
+            Base.metadata.create_all(bind=engine)
+            if settings.SEED_DEMO:
+                try:
+                    seed_database()
+                except Exception as e:
+                    print(f"Seed note: {e}")
         except Exception as e:
-            print(f"Seed note: {e}")
+            print(f"Database connection note (offline/dev fallback): {e}")
     yield
 
 
@@ -211,10 +215,8 @@ def adjust_stock(item_id: int, payload: StockAdjustRequest, db: Session = Depend
                 detail=f"Insufficient stock! Available: {item.quantity_on_hand}, Requested: {qty}"
             )
         item.quantity_on_hand -= qty
-        signed_change = -qty
     elif adj_type == "RESTOCK":
         item.quantity_on_hand += qty
-        signed_change = qty
     else:
         raise HTTPException(
             status_code=400,
