@@ -10,7 +10,7 @@ export default function AboutModal({ isOpen, onClose }) {
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}a
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="relative w-full max-w-2xl rounded-3xl coffee-glass p-6 sm:p-7 shadow-2xl border max-h-[90vh] overflow-y-auto"
@@ -26,6 +26,9 @@ export default function AboutModal({ isOpen, onClose }) {
                 <h3 className="font-extrabold text-lg" style={{ color: "var(--text-primary)" }}>ResourceOne Platform</h3>
                 <p className="text-xs" style={{ color: "var(--text-muted)" }}>
                   Smart Inventory & Resource Operations Architecture
+                </p>
+                <p className="text-[10px] font-mono mt-1" style={{ color: "var(--text-muted)" }}>
+                  Version 1.0.0
                 </p>
               </div>
             </div>
