@@ -1,8 +1,9 @@
-import React from "react";
+﻿import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardPage from "../pages/DashboardPage";
 import InventoryPage from "../pages/InventoryPage";
 import AuditLogPage from "../pages/AuditLogPage";
+import DesignPage from "../pages/DesignPage";
 
 export default function AppRoutes({
   stats,
@@ -65,6 +66,10 @@ export default function AppRoutes({
         path="*"
         element={<Navigate to="/dashboard" replace />}
       />
+      {import.meta.env.DEV && (
+        <Route path="/design" element={<DesignPage />} />
+      )}
     </Routes>
   );
 }
+

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+﻿import React, { useState, useEffect } from "react";
 import { X, Save, Edit3 } from "lucide-react";
 
 export default function EditItemModal({ isOpen, item, onClose, onSave, contextMode }) {
@@ -69,14 +68,14 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
   };
 
   return (
-    <AnimatePresence>
+    
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-lg rounded-3xl coffee-glass p-6 sm:p-7 shadow-2xl border border-[#3c2a1e]/80 shadow-black/60 overflow-hidden"
+        <div
+          
+          
+          
+          
+          className="relative w-full max-w-lg   p-6 sm:p-7 shadow-2xl border border-[#3c2a1e]/80 shadow-black/60 overflow-hidden"
           style={{ background: "var(--bg-card)", borderColor: "var(--border-subtle)" }}
         >
           {/* Header */}
@@ -88,7 +87,7 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
               <div>
                 <h3 className="font-extrabold text-lg" style={{ color: "var(--text-primary)" }}>Edit Inventory Item</h3>
                 <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                  Update properties for SKU: <span className="font-mono font-bold" style={{ color: "var(--gold-warm)" }}>{item.sku}</span>
+                  Update properties for SKU: <span className="font-mono font-bold" style={{ color: "var(--accent)" }}>{item.sku}</span>
                 </p>
               </div>
             </div>
@@ -239,19 +238,20 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
               >
                 Cancel
               </button>
-              <motion.button
-                whileTap={{ scale: 0.96 }}
+              <button
+                
                 type="submit"
                 disabled={loading}
                 className="btn-gold flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black transition-all cursor-pointer disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? "Saving Changes..." : "Save Changes"}</span>
-              </motion.button>
+              </button>
             </div>
           </form>
-        </motion.div>
+        </div>
       </div>
-    </AnimatePresence>
+    
   );
 }
+

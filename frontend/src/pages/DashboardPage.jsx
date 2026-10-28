@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
 import StatCard from "../components/common/StatCard";
 import {
   Package,
@@ -51,15 +50,15 @@ export default function DashboardPage({
       : "";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+    <div
+      
+      
+      
       className="space-y-5"
     >
       {/* Context Hero Banner */}
       <div
-        className="relative overflow-hidden rounded-3xl p-6 sm:p-7 border shadow-2xl transition-colors"
+        className="relative overflow-hidden  p-6 sm:p-7 border shadow-2xl transition-colors"
         style={{
           background: isNGO
             ? "linear-gradient(135deg, var(--bg-card) 0%, rgba(245, 200, 66, 0.08) 100%)"
@@ -74,7 +73,7 @@ export default function DashboardPage({
                 className="p-2.5 rounded-2xl border"
                 style={{
                   background: "var(--badge-bg)",
-                  color: "var(--gold-vivid)",
+                  color: "var(--accent)",
                   borderColor: "var(--badge-border)"
                 }}
               >
@@ -93,18 +92,18 @@ export default function DashboardPage({
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             {userRole !== "Volunteer" && onOpenAddModal && (
-              <motion.button
-                whileTap={{ scale: 0.95 }}
+              <button
+                
                 onClick={onOpenAddModal}
                 className="btn-gold flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black shadow-lg transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Item</span>
-              </motion.button>
+              </button>
             )}
 
-            <motion.button
-              whileTap={{ scale: 0.95 }}
+            <button
+              
               onClick={onExportCSV}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer"
               style={{
@@ -115,7 +114,7 @@ export default function DashboardPage({
             >
               <Download className="w-4 h-4" />
               <span>Export CSV</span>
-            </motion.button>
+            </button>
           </div>
         </div>
       </div>
@@ -143,7 +142,7 @@ export default function DashboardPage({
           value={`${stats?.total_outflow_today ?? 0} units`}
           subtitle={isNGO ? "Relief outreach volume" : "Counter sales volume"}
           icon={TrendingUp}
-          color="latte"
+          color=""
           trend="Operational"
         />
         <StatCard
@@ -158,10 +157,10 @@ export default function DashboardPage({
 
       {/* Urgent Low-Stock Banner */}
       {urgentItem && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-5 rounded-3xl border border-amber-500/30 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl"
+        <div
+          
+          
+          className="p-5  border border-amber-500/30 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl"
           style={{ background: "var(--bg-card)" }}
         >
           <div className="flex items-center gap-3.5">
@@ -178,7 +177,7 @@ export default function DashboardPage({
                 </span>
               </div>
               <p className="text-sm font-bold mt-0.5" style={{ color: "var(--text-primary)" }}>
-                {urgentItem.name} — Only{" "}
+                {urgentItem.name} â€” Only{" "}
                 <span className="text-amber-500 font-extrabold">{urgentItem.quantity} units</span>{" "}
                 remaining (safety threshold: {urgentItem.reorder_level})
               </p>
@@ -186,16 +185,16 @@ export default function DashboardPage({
           </div>
 
           {onOpenAdjustModal && (
-            <motion.button
-              whileTap={{ scale: 0.95 }}
+            <button
+              
               onClick={() => onOpenAdjustModal(urgentItem)}
               className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-[#0d0900] font-black text-xs shadow-lg shadow-amber-500/20 transition-all whitespace-nowrap cursor-pointer"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Restock This SKU</span>
-            </motion.button>
+            </button>
           )}
-        </motion.div>
+        </div>
       )}
 
       {/* Chart + Activity Log */}
@@ -203,14 +202,14 @@ export default function DashboardPage({
 
         {/* Throughput Curve */}
         <div
-          className="lg:col-span-2 rounded-3xl coffee-glass p-6 space-y-4 border shadow-2xl"
+          className="lg:col-span-2   p-6 space-y-4 border shadow-2xl"
           style={{ background: "var(--bg-card)", borderColor: "var(--border-subtle)" }}
         >
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
               <h3 className="font-extrabold text-sm flex items-center gap-2" style={{ color: "var(--text-primary)" }}>
-                <TrendingUp className="w-4 h-4" style={{ color: "var(--gold-vivid)" }} />
-                Operational Velocity — Last 7 Days
+                <TrendingUp className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                Operational Velocity â€” Last 7 Days
               </h3>
               <p className="text-[11px] mt-0.5" style={{ color: "var(--text-muted)" }}>
                 Intake (Restocks) vs. Outflow ({isNGO ? "Aid Dispatches" : "Customer Sales"})
@@ -218,7 +217,7 @@ export default function DashboardPage({
             </div>
             <div className="flex items-center gap-4 text-[11px] font-bold">
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--gold-vivid)" }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--accent)" }} />
                 <span style={{ color: "var(--text-muted)" }}>Intake</span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -271,7 +270,7 @@ export default function DashboardPage({
             </svg>
 
             {hoveredPoint && (
-              <div className="mt-2 text-center text-xs font-mono font-bold" style={{ color: "var(--gold-vivid)" }}>
+              <div className="mt-2 text-center text-xs font-mono font-bold" style={{ color: "var(--accent)" }}>
                 {hoveredPoint.day}: {hoveredPoint.type} = {hoveredPoint.val} units
               </div>
             )}
@@ -280,7 +279,7 @@ export default function DashboardPage({
 
         {/* Recent Activity Stream with direct link to Audit Ledger */}
         <div
-          className="rounded-3xl coffee-glass p-6 space-y-3 border shadow-2xl flex flex-col justify-between"
+          className="  p-6 space-y-3 border shadow-2xl flex flex-col justify-between"
           style={{ background: "var(--bg-card)", borderColor: "var(--border-subtle)" }}
         >
           <div>
@@ -334,13 +333,14 @@ export default function DashboardPage({
             }}
           >
             <div className="flex items-center gap-2">
-              <History className="w-4 h-4" style={{ color: "var(--gold-vivid)" }} />
+              <History className="w-4 h-4" style={{ color: "var(--accent)" }} />
               <span>Open Complete Audit Ledger</span>
             </div>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
+

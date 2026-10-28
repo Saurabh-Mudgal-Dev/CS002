@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+﻿import React, { createContext, useContext, useState, useEffect } from "react";
 
 const ThemeContext = createContext();
 
@@ -10,7 +10,7 @@ export function ThemeProvider({ children }) {
     } catch {
       // ignore
     }
-    return "dark";
+    return "light";
   });
 
   useEffect(() => {
@@ -40,3 +40,4 @@ export function useTheme() {
   }
   return context;
 }
+

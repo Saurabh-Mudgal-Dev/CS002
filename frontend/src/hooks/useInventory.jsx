@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+﻿import { useState, useEffect, useCallback, useMemo } from "react";
 import { getInventory, createItem, updateItem, deleteItem, adjustStock } from "../api/client";
 
 export function useInventory(contextMode) {
@@ -65,3 +65,4 @@ export function useInventory(contextMode) {
     lowStockCount: lowStockItems.length
   };
 }
+

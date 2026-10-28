@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+﻿import React, { useState } from "react";
 import { X, Plus, Package } from "lucide-react";
 
 export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
@@ -53,14 +52,14 @@ export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
   };
 
   return (
-    <AnimatePresence>
+    
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-lg rounded-3xl coffee-glass p-6 sm:p-7 shadow-2xl border border-[#3c2a1e]/80 shadow-black/60 overflow-hidden"
+        <div
+          
+          
+          
+          
+          className="relative w-full max-w-lg   p-6 sm:p-7 shadow-2xl border border-[#3c2a1e]/80 shadow-black/60 overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-[#2a1e16]">
@@ -169,7 +168,7 @@ export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
 
               <div>
                 <label className="block text-xs font-bold text-[#bdaaa0] mb-1.5">
-                  Unit Cost ($/₹)
+                  Unit Cost ($/â‚¹)
                 </label>
                 <input
                   type="number"
@@ -192,19 +191,20 @@ export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
               >
                 Cancel
               </button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
+              <button
+                
                 type="submit"
                 disabled={loading}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#f5c842] to-[#e8a722] hover:from-[#fdd96b] hover:to-[#f5c842] text-[#0d0900] text-xs font-black shadow-lg shadow-[#f5c842]/20 transition-all disabled:opacity-50 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>{loading ? "Registering..." : "Create Item"}</span>
-              </motion.button>
+              </button>
             </div>
           </form>
-        </motion.div>
+        </div>
       </div>
-    </AnimatePresence>
+    
   );
 }
+

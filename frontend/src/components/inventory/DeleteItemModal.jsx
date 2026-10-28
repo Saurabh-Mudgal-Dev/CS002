@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+﻿import React, { useState } from "react";
 import { Trash2, AlertTriangle, X } from "lucide-react";
 
 export default function DeleteItemModal({ isOpen, item, onClose, onConfirm }) {
@@ -18,14 +17,14 @@ export default function DeleteItemModal({ isOpen, item, onClose, onConfirm }) {
   };
 
   return (
-    <AnimatePresence>
+    
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-md rounded-3xl coffee-glass p-6 sm:p-7 shadow-2xl border border-rose-500/30 overflow-hidden"
+        <div
+          
+          
+          
+          
+          className="relative w-full max-w-md   p-6 sm:p-7 shadow-2xl border border-rose-500/30 overflow-hidden"
           style={{ background: "var(--bg-card)" }}
         >
           <div className="flex items-start justify-between pb-3">
@@ -88,18 +87,19 @@ export default function DeleteItemModal({ isOpen, item, onClose, onConfirm }) {
             >
               Cancel
             </button>
-            <motion.button
-              whileTap={{ scale: 0.96 }}
+            <button
+              
               onClick={handleConfirm}
               disabled={loading}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold shadow-lg shadow-rose-600/25 transition-all cursor-pointer disabled:opacity-50"
             >
               <Trash2 className="w-4 h-4" />
               <span>{loading ? "Deleting..." : "Confirm Delete"}</span>
-            </motion.button>
+            </button>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </AnimatePresence>
+    
   );
 }
+

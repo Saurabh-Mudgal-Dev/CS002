@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { motion } from "motion/react";
+﻿import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   History,
   Search,
@@ -102,15 +101,15 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+    <div
+      
+      
+      
       className="space-y-4"
     >
       {/* Page Header */}
       <div
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl coffee-glass border shadow-2xl"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6   border shadow-2xl"
         style={{ borderColor: "var(--border-subtle)", background: "var(--bg-card)" }}
       >
         <div className="space-y-1">
@@ -119,7 +118,7 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
               className="p-2.5 rounded-2xl border"
               style={{
                 background: "var(--badge-bg)",
-                color: "var(--gold-vivid)",
+                color: "var(--accent)",
                 borderColor: "var(--badge-border)"
               }}
             >
@@ -135,8 +134,8 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 shrink-0">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
+          <button
+            
             onClick={fetchLogs}
             disabled={loading}
             className="flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer"
@@ -148,10 +147,10 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>Refresh</span>
-          </motion.button>
+          </button>
 
-          <motion.button
-            whileTap={{ scale: 0.95 }}
+          <button
+            
             onClick={onExportCSV}
             className="flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer"
             style={{
@@ -162,7 +161,7 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Audit CSV</span>
-          </motion.button>
+          </button>
         </div>
       </div>
 
@@ -213,7 +212,7 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
 
       {/* Ledger Table */}
       <div
-        className="rounded-3xl coffee-glass overflow-hidden border shadow-2xl"
+        className="  overflow-hidden border shadow-2xl"
         style={{ borderColor: "var(--border-subtle)", background: "var(--bg-card)" }}
       >
         <div className="overflow-x-auto">
@@ -289,7 +288,7 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
                         ) : log.quantity_change < 0 ? (
                           <span className="text-rose-400">{log.quantity_change}</span>
                         ) : (
-                          <span style={{ color: "var(--text-dim)" }}>—</span>
+                          <span style={{ color: "var(--text-dim)" }}>â€”</span>
                         )}
                       </td>
 
@@ -308,7 +307,7 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
                             color: "var(--text-secondary)"
                           }}
                         >
-                          <ShieldCheck className="w-3 h-3" style={{ color: "var(--gold-vivid)" }} />
+                          <ShieldCheck className="w-3 h-3" style={{ color: "var(--accent)" }} />
                           <span>{log.performed_by || "System"}</span>
                         </span>
                       </td>
@@ -320,6 +319,7 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
           </table>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
+
