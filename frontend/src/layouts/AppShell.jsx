@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
 import { useTheme } from "../context/ThemeContext";
 import {
@@ -18,7 +19,7 @@ import {
   Store,
   HeartHandshake,
   ChevronDown,
-  Compass
+  Sparkles
 } from "lucide-react";
 import Badge from "../components/ui/Badge";
 import Button from "../components/ui/Button";
@@ -38,7 +39,6 @@ export default function AppShell({ children, toast, closeToast }) {
 
   const isNGO = organization?.type === "ngo";
 
-  // Navigation Items per §10.5
   const navItems = [
     {
       path: "/overview",
@@ -94,55 +94,61 @@ export default function AppShell({ children, toast, closeToast }) {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-[var(--bg-primary)] text-[var(--text-secondary)]">
       {/* Mobile Backdrop */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-xs lg:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Sidebar (232px) */}
+      {/* Alukaze Sidebar (240px) */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-[232px] bg-[var(--bg-surface-elev)] border-r border-[var(--border-subtle)] flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-[240px] bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-800 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--border-subtle)]">
+        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-100 dark:border-slate-800">
           <Link
             to="/overview"
-            className="flex items-center gap-2.5 font-bold tracking-tight text-sm text-[var(--text-primary)]"
+            className="flex items-center gap-2.5 font-bold tracking-tight text-sm text-slate-900 dark:text-white"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <div className="w-8 h-8 rounded-lg bg-[#123A6B] text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 text-white flex items-center justify-center font-extrabold text-xs shadow-xs ring-1 ring-white/20">
               R1
             </div>
             <div className="flex flex-col">
-              <span className="leading-tight">ResourceOne</span>
-              <span className="text-[10px] text-[var(--text-muted)] font-normal truncate max-w-[140px]">
-                {organization?.name || "Inventory Platform"}
+              <span className="leading-tight font-extrabold text-slate-900 dark:text-white">ResourceOne</span>
+              <span className="text-[10px] text-slate-400 font-medium truncate max-w-[140px]">
+                {organization?.name || "Inventory OS"}
               </span>
             </div>
           </Link>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="p-1 rounded-md text-[var(--text-dim)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white lg:hidden cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Organization / Context Indicator */}
-        <div className="px-4 py-3 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-medium text-[var(--text-primary)]">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
               {isNGO ? (
                 <HeartHandshake className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               ) : (
                 <Store className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               )}
-              <span className="truncate max-w-[120px] font-semibold">
-                {isNGO ? "Community NGO" : "Retail Store"}
+              <span className="truncate max-w-[125px]">
+                {isNGO ? "Community NGO" : "Retail Commercial"}
               </span>
             </div>
             <Badge variant={isNGO ? "success" : "info"} size="sm">
@@ -150,18 +156,17 @@ export default function AppShell({ children, toast, closeToast }) {
             </Badge>
           </div>
 
-          {/* Quick toggle for guest viewers to preview NGO vs Retail */}
           {!isAuthenticated && (
-            <div className="mt-2 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-[11px]">
-              <span className="text-[var(--text-dim)]">Public Preview:</span>
-              <div className="flex items-center gap-1">
+            <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-700 flex items-center justify-between text-[11px]">
+              <span className="text-slate-400 font-medium">Preview:</span>
+              <div className="flex items-center gap-1 bg-slate-200/50 dark:bg-slate-700/50 p-0.5 rounded-lg">
                 <button
                   type="button"
                   onClick={() => setGuestOrgType("ngo")}
-                  className={`px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors ${
+                  className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all ${
                     guestOrgType === "ngo"
-                      ? "bg-[var(--accent)] text-white"
-                      : "text-[var(--text-muted)] hover:bg-[var(--bg-surface-elev)]"
+                      ? "bg-white dark:bg-slate-800 text-blue-600 shadow-2xs"
+                      : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
                   NGO
@@ -169,10 +174,10 @@ export default function AppShell({ children, toast, closeToast }) {
                 <button
                   type="button"
                   onClick={() => setGuestOrgType("retail")}
-                  className={`px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors ${
+                  className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-all ${
                     guestOrgType === "retail"
-                      ? "bg-[var(--accent)] text-white"
-                      : "text-[var(--text-muted)] hover:bg-[var(--bg-surface-elev)]"
+                      ? "bg-white dark:bg-slate-800 text-blue-600 shadow-2xs"
+                      : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
                   Retail
@@ -198,18 +203,27 @@ export default function AppShell({ children, toast, closeToast }) {
                 key={item.path}
                 to={item.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                className={`relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-colors duration-150 ${
                   isActive
-                    ? "bg-[#123A6B] text-white shadow-xs"
-                    : "text-[var(--text-muted)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]"
+                    ? "text-white dark:text-white"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
-                <div className="flex items-center gap-2.5">
+                {isActive && (
+                  <motion.div
+                    layoutId="sidebarActivePill"
+                    className="absolute inset-0 bg-slate-900 dark:bg-blue-600 rounded-xl -z-10 shadow-xs"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <div className="flex items-center gap-2.5 z-10">
                   <Icon className="w-4 h-4 shrink-0" />
                   <span>{item.label}</span>
                 </div>
                 {item.lockedForGuest && (
-                  <span className="text-[10px] text-[var(--text-dim)] opacity-70">Auth</span>
+                  <span className="text-[10px] text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md z-10">
+                    Auth
+                  </span>
                 )}
               </Link>
             );
@@ -217,15 +231,15 @@ export default function AppShell({ children, toast, closeToast }) {
         </nav>
 
         {/* User Footer Panel */}
-        <div className="p-3 border-t border-[var(--border-subtle)] space-y-2">
+        <div className="p-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
           {isAuthenticated ? (
-            <div className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-2">
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 space-y-2.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#123A6B] text-white text-xs font-bold flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shrink-0">
                   {user?.full_name ? user.full_name.charAt(0).toUpperCase() : "U"}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-[var(--text-primary)] truncate">
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
                     {user?.full_name || user?.email}
                   </p>
                   <div className="flex items-center gap-1.5 mt-0.5">
@@ -236,11 +250,11 @@ export default function AppShell({ children, toast, closeToast }) {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between">
+              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700 flex items-center justify-between text-xs">
                 <button
                   type="button"
                   onClick={() => setAboutOpen(true)}
-                  className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center gap-1"
+                  className="text-[11px] text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center gap-1 cursor-pointer font-medium"
                 >
                   <Info className="w-3.5 h-3.5" />
                   About
@@ -248,7 +262,7 @@ export default function AppShell({ children, toast, closeToast }) {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="text-[11px] text-red-600 dark:text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
+                  className="text-[11px] text-rose-600 hover:underline flex items-center gap-1 cursor-pointer font-medium"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Sign Out
@@ -256,13 +270,13 @@ export default function AppShell({ children, toast, closeToast }) {
               </div>
             </div>
           ) : (
-            <div className="p-2.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-2.5">
-              <div className="flex items-center gap-2">
-                <Compass className="w-4 h-4 text-[var(--accent)]" />
-                <span className="text-xs font-semibold text-[var(--text-primary)]">Public Guest View</span>
+            <div className="p-3 rounded-xl bg-gradient-to-b from-blue-50/70 to-indigo-50/40 dark:from-slate-800 dark:to-slate-800/40 border border-blue-100 dark:border-slate-700 space-y-2.5">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span className="text-xs font-bold text-slate-900 dark:text-white">Public Showcase</span>
               </div>
-              <p className="text-[11px] text-[var(--text-muted)] leading-tight">
-                Viewing general inventory and operational metrics.
+              <p className="text-[11px] text-slate-500 leading-tight">
+                Live sandbox mode enabled. Explore stock metrics and audits.
               </p>
               <Link to="/login" className="block">
                 <Button variant="primary" size="sm" className="w-full justify-center">
@@ -273,20 +287,19 @@ export default function AppShell({ children, toast, closeToast }) {
             </div>
           )}
 
-          {/* Quick theme & about footer */}
-          <div className="flex items-center justify-between px-1 text-[11px] text-[var(--text-dim)]">
+          <div className="flex items-center justify-between px-1 text-[11px] text-slate-400">
             <button
               type="button"
               onClick={() => setAboutOpen(true)}
-              className="hover:text-[var(--text-primary)]"
+              className="hover:text-slate-700 dark:hover:text-white cursor-pointer font-medium"
             >
-              v1.0.0
+              ResourceOne v1.0
             </button>
             <button
               type="button"
               onClick={toggleTheme}
-              className="p-1 rounded-md hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]"
-              title="Toggle color theme"
+              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
+              title="Toggle Light/Dark Theme"
             >
               {theme === "dark" ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
             </button>
@@ -295,50 +308,50 @@ export default function AppShell({ children, toast, closeToast }) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:pl-[232px] min-w-0">
-        {/* Topbar (64px) */}
-        <header className="sticky top-0 z-30 h-16 bg-[var(--bg-surface-elev)] border-b border-[var(--border-subtle)] px-4 sm:px-6 flex items-center justify-between">
+      <div className="flex-1 flex flex-col lg:pl-[240px] min-w-0">
+        {/* Alukaze Topbar (64px) with subtle blur */}
+        <header className="sticky top-0 z-30 h-16 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="p-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer"
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 dark:hover:text-white lg:hidden cursor-pointer"
             >
               <Menu className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-sm sm:text-base font-bold text-[var(--text-primary)] leading-tight">
+              <h1 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
                 {organization?.name || "ResourceOne Platform"}
               </h1>
-              <p className="text-[11px] text-[var(--text-muted)] hidden sm:block">
-                {isNGO ? "Humanitarian Aid & Relief Operations" : "Small Retail Inventory Operations"}
+              <p className="text-[11px] text-slate-400 hidden sm:block font-medium">
+                {isNGO ? "Community Aid & Humanitarian Operations" : "Commercial Retail & Grocers"}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5">
-            {/* Status indicator */}
-            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/40">
+            {/* Live indicator */}
+            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/40 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Live System</span>
+              <span>Live Engine</span>
             </div>
 
-            {/* Role / Guest Badge */}
-            <Badge variant={roleBadge.variant} size="sm">
+            {/* Role Badge */}
+            <Badge variant={roleBadge.variant} size="md">
               {roleBadge.label}
             </Badge>
 
-            {/* Theme toggle */}
+            {/* Theme Toggle */}
             <button
               type="button"
               onClick={toggleTheme}
-              className="p-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] transition-colors cursor-pointer"
-              title="Toggle Dark/Light Mode"
+              className="p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              title="Toggle theme"
             >
               {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
-            {/* User action button */}
+            {/* User action */}
             {!isAuthenticated ? (
               <Link to="/login">
                 <Button variant="primary" size="sm">
@@ -351,43 +364,49 @@ export default function AppShell({ children, toast, closeToast }) {
                 <button
                   type="button"
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-1.5 p-1.5 rounded-lg border border-[var(--border-subtle)] hover:bg-[var(--bg-surface)] transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#123A6B] text-white text-[11px] font-bold flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-slate-900 text-white text-[11px] font-bold flex items-center justify-center">
                     {user?.full_name ? user.full_name.charAt(0).toUpperCase() : "U"}
                   </div>
-                  <ChevronDown className="w-3.5 h-3.5 text-[var(--text-dim)]" />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </button>
 
-                {userDropdownOpen && (
-                  <div
-                    className="absolute right-0 mt-2 w-48 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] shadow-lg py-1.5 z-50 text-xs"
-                    onClick={() => setUserDropdownOpen(false)}
-                  >
-                    <div className="px-3 py-2 border-b border-[var(--border-subtle)]">
-                      <p className="font-semibold text-[var(--text-primary)] truncate">
-                        {user?.full_name}
-                      </p>
-                      <p className="text-[11px] text-[var(--text-muted)] truncate">{user?.email}</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setAboutOpen(true)}
-                      className="w-full text-left px-3 py-2 hover:bg-[var(--bg-surface)] flex items-center gap-2 text-[var(--text-secondary)]"
+                <AnimatePresence>
+                  {userDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -6, scale: 0.95 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      className="absolute right-0 mt-2 w-48 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl py-1.5 z-50 text-xs"
+                      onClick={() => setUserDropdownOpen(false)}
                     >
-                      <Info className="w-3.5 h-3.5 text-[var(--text-muted)]" />
-                      About ResourceOne
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="w-full text-left px-3 py-2 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 flex items-center gap-2 cursor-pointer"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      Sign Out
-                    </button>
-                  </div>
-                )}
+                      <div className="px-3.5 py-2.5 border-b border-slate-100 dark:border-slate-800">
+                        <p className="font-semibold text-slate-900 dark:text-white truncate">
+                          {user?.full_name}
+                        </p>
+                        <p className="text-[11px] text-slate-400 truncate">{user?.email}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setAboutOpen(true)}
+                        className="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 text-slate-700 dark:text-slate-300 cursor-pointer"
+                      >
+                        <Info className="w-3.5 h-3.5 text-slate-400" />
+                        About Platform
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full text-left px-3.5 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 flex items-center gap-2 cursor-pointer font-medium"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
           </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
 import { api } from "../lib/api";
 import { formatCurrency, formatNumber } from "../lib/format";
@@ -11,13 +12,10 @@ import {
   RefreshCw,
   FileSpreadsheet,
   FileText,
-  Lock,
   Coins,
   ArrowRight,
-  ShieldCheck,
   HeartHandshake,
   Store,
-  LogIn
 } from "lucide-react";
 import Card from "../components/ui/Card";
 import KpiCard from "../components/ui/KpiCard";
@@ -26,6 +24,23 @@ import Badge from "../components/ui/Badge";
 import ThroughputChart from "../features/dashboard/ThroughputChart";
 import AlertsList from "../features/dashboard/AlertsList";
 import RecentMovements from "../features/dashboard/RecentMovements";
+import PublicLandingShowcase from "../features/dashboard/PublicLandingShowcase";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
+};
 
 export default function OverviewPage({ showToast = () => {} }) {
   const { organization, isAuthenticated, can } = useAuth();
@@ -97,6 +112,17 @@ export default function OverviewPage({ showToast = () => {} }) {
     }
   };
 
+  // If visitor is unauthenticated (non-auth / guest), render the rich Alukaze Landing Showcase & Interactive Sample Charts!
+  if (!isAuthenticated) {
+    return (
+      <PublicLandingShowcase
+        onDownloadReport={handleDownload}
+        showToast={showToast}
+      />
+    );
+  }
+
+  // Authenticated Overview
   const isNGO = organization?.type === "ngo";
   const currency = organization?.currency || "INR";
   const kpis = summaryData?.kpis || {};
@@ -112,19 +138,27 @@ export default function OverviewPage({ showToast = () => {} }) {
     : "—";
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border-subtle)]">
+      <motion.div
+        variants={itemVariants}
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-800"
+      >
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Operations Overview
             </h1>
             <Badge variant={isNGO ? "success" : "info"} size="sm">
               {isNGO ? "Humanitarian Aid" : "Retail Commercial"}
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-[var(--text-muted)]">
+          <p className="text-xs sm:text-sm text-slate-500">
             Live stock balance, 30-day velocity, and operational supply health
           </p>
         </div>
@@ -135,10 +169,10 @@ export default function OverviewPage({ showToast = () => {} }) {
             type="button"
             onClick={handleManualRefresh}
             disabled={refreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-mid)] transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             title="Refresh overview metrics"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-[var(--accent)]" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-blue-600" : ""}`} />
             <span>Updated {formattedUpdateTime}</span>
           </button>
 
@@ -151,7 +185,7 @@ export default function OverviewPage({ showToast = () => {} }) {
               disabled={Boolean(downloadingReport)}
               title="Download full inventory CSV audit sheet"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 mr-1 text-emerald-600 dark:text-emerald-400" />
+              <FileSpreadsheet className="w-3.5 h-3.5 mr-1 text-emerald-600" />
               <span>CSV</span>
             </Button>
 
@@ -162,7 +196,7 @@ export default function OverviewPage({ showToast = () => {} }) {
               disabled={Boolean(downloadingReport)}
               title="Download formal operations and valuation PDF report"
             >
-              <FileText className="w-3.5 h-3.5 mr-1 text-red-600 dark:text-red-400" />
+              <FileText className="w-3.5 h-3.5 mr-1 text-rose-600" />
               <span>PDF Report</span>
             </Button>
 
@@ -174,39 +208,19 @@ export default function OverviewPage({ showToast = () => {} }) {
                 disabled={Boolean(downloadingReport)}
                 title="Download combined purchases, donations, and expenses CSV"
               >
-                <Coins className="w-3.5 h-3.5 mr-1 text-amber-600 dark:text-amber-400" />
+                <Coins className="w-3.5 h-3.5 mr-1 text-amber-600" />
                 <span>Finance CSV</span>
               </Button>
             )}
           </div>
         </div>
-      </div>
-
-      {/* Guest Notice Banner if unauthenticated */}
-      {!isAuthenticated && (
-        <div className="p-3.5 sm:p-4 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50/60 dark:bg-blue-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2.5 text-blue-900 dark:text-blue-200">
-            <span className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
-              <ShieldCheck className="w-4 h-4" />
-            </span>
-            <div>
-              <span className="font-semibold">Public Overview Active: </span>
-              <span className="text-blue-800 dark:text-blue-300">
-                You can freely browse inventory items, view stock throughput, and download catalog reports without an account.
-              </span>
-            </div>
-          </div>
-          <Link to="/login" className="shrink-0">
-            <Button variant="primary" size="sm" className="w-full sm:w-auto">
-              <LogIn className="w-3.5 h-3.5 mr-1" />
-              Sign in for Financials & Management
-            </Button>
-          </Link>
-        </div>
-      )}
+      </motion.div>
 
       {/* KPI Cards Row (4 cards) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div
+        variants={itemVariants}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         {/* KPI 1: Inventory Valuation */}
         <KpiCard
           title="Inventory Valuation"
@@ -250,25 +264,6 @@ export default function OverviewPage({ showToast = () => {} }) {
             icon={Coins}
             variant={finance.net_position >= 0 ? "success" : "danger"}
           />
-        ) : !isAuthenticated ? (
-          <Card className="p-4 border border-[var(--border-subtle)] flex flex-col justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] font-medium">
-                <span>Net Cash Position</span>
-                <Lock className="w-3.5 h-3.5 text-[var(--text-dim)]" />
-              </div>
-              <p className="text-base font-bold text-[var(--text-primary)]">
-                Locked (Sign in)
-              </p>
-              <p className="text-[11px] text-[var(--text-dim)] leading-tight">
-                Cash flow & purchase accounts require authorized login.
-              </p>
-            </div>
-            <Link to="/login" className="mt-3 pt-2 border-t border-[var(--border-subtle)] text-[11px] text-[var(--accent)] font-medium hover:underline flex items-center justify-between">
-              <span>Sign in to unlock</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-          </Card>
         ) : (
           <KpiCard
             title="Aid Field Disbursements"
@@ -278,10 +273,13 @@ export default function OverviewPage({ showToast = () => {} }) {
             variant="default"
           />
         )}
-      </div>
+      </motion.div>
 
       {/* Main Grid: Charts & Alerts */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <motion.div
+        variants={itemVariants}
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+      >
         {/* Left Column (8 cols): Throughput Chart & Recent Movements */}
         <div className="lg:col-span-8 space-y-6">
           <ThroughputChart data={throughputCurve} isNGO={isNGO} />
@@ -293,12 +291,12 @@ export default function OverviewPage({ showToast = () => {} }) {
           <AlertsList alerts={alerts} />
 
           {/* Quick Operations Guide Card */}
-          <Card className="p-5 border border-[var(--border-subtle)] space-y-3.5">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              {isNGO ? <HeartHandshake className="w-4 h-4 text-[var(--accent)]" /> : <Store className="w-4 h-4 text-[var(--accent)]" />}
+          <Card className="p-5 space-y-3.5">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              {isNGO ? <HeartHandshake className="w-4 h-4 text-blue-600" /> : <Store className="w-4 h-4 text-amber-600" />}
               <span>{isNGO ? "Humanitarian Guidelines" : "Store Management"}</span>
             </div>
-            <div className="text-xs text-[var(--text-secondary)] space-y-2 leading-relaxed">
+            <div className="text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
               <p>
                 <strong>Stock Reorder Rule:</strong> Any item reaching or falling below safety threshold triggers an operational alert.
               </p>
@@ -306,10 +304,10 @@ export default function OverviewPage({ showToast = () => {} }) {
                 <strong>Audit Compliance:</strong> All restocks, distributions, and counter sales post immutable ledger entries to prevent inventory shrinkage.
               </p>
             </div>
-            <div className="pt-2 border-t border-[var(--border-subtle)]">
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
               <Link
                 to="/inventory"
-                className="text-xs font-medium text-[var(--accent)] hover:underline flex items-center justify-between"
+                className="text-xs font-semibold text-blue-600 hover:underline flex items-center justify-between"
               >
                 <span>Browse Complete Catalog</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -317,7 +315,7 @@ export default function OverviewPage({ showToast = () => {} }) {
             </div>
           </Card>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

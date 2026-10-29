@@ -18,21 +18,21 @@ function CustomTooltip({ active, payload, label }) {
     const net = intake - outflow;
 
     return (
-      <div className="p-3 bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] rounded-lg shadow-md text-xs space-y-1.5 min-w-[150px]">
-        <p className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-subtle)] pb-1">
+      <div className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg text-xs space-y-1.5 min-w-[150px]">
+        <p className="font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-1">
           {label}
         </p>
-        <div className="flex items-center justify-between text-blue-600 dark:text-blue-400">
+        <div className="flex items-center justify-between text-blue-600 dark:text-blue-400 font-semibold">
           <span>Intake:</span>
-          <span className="font-semibold tabular-nums">+{formatNumber(intake)}</span>
+          <span className="tabular-nums">+{formatNumber(intake)}</span>
         </div>
-        <div className="flex items-center justify-between text-amber-600 dark:text-amber-400">
+        <div className="flex items-center justify-between text-amber-600 dark:text-amber-400 font-semibold">
           <span>Outflow:</span>
-          <span className="font-semibold tabular-nums">-{formatNumber(outflow)}</span>
+          <span className="tabular-nums">-{formatNumber(outflow)}</span>
         </div>
-        <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-[var(--text-primary)] font-medium">
-          <span>Net Delta:</span>
-          <span className={`tabular-nums ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
+        <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 font-bold">
+          <span className="text-slate-500">Net Delta:</span>
+          <span className={`tabular-nums ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
             {net >= 0 ? `+${formatNumber(net)}` : formatNumber(net)}
           </span>
         </div>
@@ -49,27 +49,27 @@ export default function ThroughputChart({ data = [], isNGO = true }) {
   const outflowLabel = isNGO ? "Relief Disbursements" : "Customer Sales";
 
   return (
-    <Card className="p-5 sm:p-6 border border-[var(--border-subtle)] space-y-4">
+    <Card className="p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-[var(--accent)]" />
-            <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
+            <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
               Stock Velocity & Throughput
             </h2>
           </div>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-slate-500">
             Daily intake vs. distribution volume over the past 30 days
           </p>
         </div>
 
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium">
-            <span className="w-2.5 h-2.5 rounded-xs bg-[#2563EB]" />
+        <div className="flex items-center gap-4 text-xs font-semibold">
+          <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
             <span>Intake</span>
           </div>
-          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
-            <span className="w-2.5 h-2.5 rounded-xs bg-[#D97706]" />
+          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-600" />
             <span>Outflow</span>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function ThroughputChart({ data = [], isNGO = true }) {
 
       <div className="h-[260px] w-full pt-2">
         {chartData.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-xs text-[var(--text-muted)] border border-dashed border-[var(--border-subtle)] rounded-lg">
+          <div className="h-full flex items-center justify-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
             No stock movement history recorded for this period.
           </div>
         ) : (
@@ -93,15 +93,15 @@ export default function ThroughputChart({ data = [], isNGO = true }) {
                   <stop offset="95%" stopColor="#D97706" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:stroke-slate-800" vertical={false} />
               <XAxis
                 dataKey="day"
-                tick={{ fontSize: 11, fill: "var(--text-muted)" }}
+                tick={{ fontSize: 11, fill: "#94a3b8" }}
                 tickLine={false}
-                axisLine={{ stroke: "var(--border-subtle)" }}
+                axisLine={{ stroke: "#e2e8f0" }}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: "var(--text-muted)" }}
+                tick={{ fontSize: 11, fill: "#94a3b8" }}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}

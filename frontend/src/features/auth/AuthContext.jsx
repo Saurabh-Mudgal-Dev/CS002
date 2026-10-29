@@ -53,13 +53,13 @@ export function AuthProvider({ children }) {
   const organization = user
     ? {
         id: user.org_id,
-        name: user.org_name || (user.role === "retail" ? "Sunrise Kirana Store" : "Asha Relief Foundation"),
+        name: user.org_name || (user.role === "retail" ? "Sunrise Retail Store" : "Community Relief Organization"),
         type: user.org_type || "ngo",
         currency: user.currency || "INR",
       }
     : {
         id: 1,
-        name: guestOrgType === "retail" ? "Sunrise Kirana Store" : "Asha Relief Foundation",
+        name: guestOrgType === "retail" ? "Sunrise Retail Store" : "Community Relief Organization",
         type: guestOrgType,
         currency: "INR",
       };
