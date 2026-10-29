@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+﻿import { useState, useCallback } from "react";
 
 export function useToast() {
   const [toast, setToast] = useState(null);
@@ -16,3 +16,4 @@ export function useToast() {
 
   return { toast, showToast, closeToast };
 }
+

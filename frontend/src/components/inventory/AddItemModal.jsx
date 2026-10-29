@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Package } from "lucide-react";
+import Button from "../ui/Button";
 
 export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
   const [formData, setFormData] = useState({
@@ -14,8 +15,6 @@ export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  if (!isOpen) return null;
 
   const categories = contextMode === "ngo" 
     ? ["Medical Relief", "Emergency Rations", "Sanitation & Water", "Disaster Logistics"]
@@ -54,157 +53,169 @@ export default function AddItemModal({ isOpen, onClose, onSave, contextMode }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-lg rounded-3xl coffee-glass p-6 sm:p-7 shadow-2xl border border-[#3c2a1e]/80 shadow-black/60 overflow-hidden"
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between pb-4 border-b border-[#2a1e16]">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-[#f5c842]/10 text-[#f5c842] border border-[#f5c842]/20">
-                <Package className="w-5 h-5" />
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 12 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200/90 dark:border-slate-800 overflow-hidden z-10"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/50">
+                  <Package className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">Add Inventory Item</h3>
+                  <p className="text-xs text-slate-500">
+                    Register new SKU in {contextMode === "ngo" ? "NGO Relief" : "Store Catalog"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-extrabold text-lg text-[#fdf6e9]">Add Inventory Item</h3>
-                <p className="text-xs text-[#7a6352]">
-                  Register new SKU in {contextMode === "ngo" ? "NGO Relief" : "Store Catalog"}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-[#5a4030] hover:text-[#fdf6e9] p-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {error && (
-            <div className="mt-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium">
-              {error}
-            </div>
-          )}
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-[#b5997e] mb-1.5">
-                Item Name <span className="text-rose-400">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder={contextMode === "ngo" ? "e.g., Amoxicillin 250mg Capsules" : "e.g., Premium Cooking Oil 1L"}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#0d0a08] border border-[#3c2a1e] text-sm text-[#fdf6e9] placeholder-[#3c2a1e] focus:outline-none focus:border-[#f5c842]/40 transition-all"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              <div>
-                <label className="block text-xs font-bold text-[#bdaaa0] mb-1.5">
-                  SKU Code <span className="text-rose-400">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.sku}
-                  onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                  placeholder="e.g., MED-AMOX-250"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#0d0a08] border border-[#3c2a1e] text-sm text-[#fdf6e9] placeholder-[#3c2a1e] focus:outline-none focus:border-[#f5c842]/40 transition-all uppercase font-mono"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#bdaaa0] mb-1.5">
-                  Category
-                </label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#0d0a08] border border-[#3c2a1e] text-sm text-[#fdf6e9] focus:outline-none focus:border-[#f5c842]/40 transition-all cursor-pointer"
-                >
-                  {categories.map((c) => (
-                    <option key={c} value={c} className="bg-[#0d0a08] text-[#fdf6e9]">
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="block text-xs font-bold text-[#bdaaa0] mb-1.5">
-                  Initial Stock
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={formData.quantity}
-                  onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0d0a08] border border-[#3c2a1e] text-sm text-[#fdf6e9] focus:outline-none focus:border-[#f5c842]/40 transition-all tabular-nums font-bold"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#bdaaa0] mb-1.5">
-                  Safety Threshold
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={formData.reorder_level}
-                  onChange={(e) => setFormData({ ...formData, reorder_level: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0d0a08] border border-[#3c2a1e] text-sm text-[#fdf6e9] focus:outline-none focus:border-[#f5c842]/40 transition-all tabular-nums font-bold"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#bdaaa0] mb-1.5">
-                  Unit Cost ($/₹)
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={formData.unit_price}
-                  onChange={(e) => setFormData({ ...formData, unit_price: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0d0a08] border border-[#3c2a1e] text-sm text-[#fdf6e9] focus:outline-none focus:border-[#f5c842]/40 transition-all tabular-nums font-bold"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#2a1e16]">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-xs font-bold text-[#5a4030] hover:text-[#fdf6e9] transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
-                Cancel
+                <X className="w-5 h-5" />
               </button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                type="submit"
-                disabled={loading}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#f5c842] to-[#e8a722] hover:from-[#fdd96b] hover:to-[#f5c842] text-[#0d0900] text-xs font-black shadow-lg shadow-[#f5c842]/20 transition-all disabled:opacity-50 cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>{loading ? "Registering..." : "Create Item"}</span>
-              </motion.button>
             </div>
-          </form>
-        </motion.div>
-      </div>
+
+            {error && (
+              <div className="mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/40 dark:border-rose-900/50 dark:text-rose-300 text-xs font-medium">
+                {error}
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                  Item Name <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder={contextMode === "ngo" ? "e.g., Amoxicillin 250mg Capsules" : "e.g., Premium Cooking Oil 1L"}
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    SKU Code <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.sku}
+                    onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                    placeholder="e.g., MED-AMOX-250"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase font-mono"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Category
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+                  >
+                    {categories.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Initial Stock
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.quantity}
+                    onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all tabular-nums font-bold"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Safety Threshold
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={formData.reorder_level}
+                    onChange={(e) => setFormData({ ...formData, reorder_level: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all tabular-nums font-bold"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Unit Cost (₹)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.unit_price}
+                    onChange={(e) => setFormData({ ...formData, unit_price: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all tabular-nums font-bold"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={onClose}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="sm"
+                  disabled={loading}
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  <span>{loading ? "Registering..." : "Create Item"}</span>
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </AnimatePresence>
   );
 }

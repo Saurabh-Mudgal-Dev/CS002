@@ -1,40 +1,28 @@
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import DashboardPage from "../pages/DashboardPage";
+import OverviewPage from "../pages/OverviewPage";
 import InventoryPage from "../pages/InventoryPage";
 import AuditLogPage from "../pages/AuditLogPage";
+import LoginPage from "../features/auth/LoginPage";
+import DesignPage from "../pages/DesignPage";
 
 export default function AppRoutes({
-  stats,
   inventory,
   contextMode,
   userRole,
-  setUserRole,
   onOpenAddModal,
   onOpenAdjustModal,
   onOpenEditModal,
   onOpenDeleteModal,
-  onExportCSV
+  onExportCSV,
+  showToast,
 }) {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/overview" replace />} />
+      <Route path="/dashboard" element={<Navigate to="/overview" replace />} />
       <Route
-        path="/"
-        element={<Navigate to="/dashboard" replace />}
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <DashboardPage
-            stats={stats}
-            inventory={inventory}
-            contextMode={contextMode}
-            userRole={userRole}
-            onOpenAddModal={onOpenAddModal}
-            onOpenAdjustModal={onOpenAdjustModal}
-            onExportCSV={onExportCSV}
-          />
-        }
+        path="/overview"
+        element={<OverviewPage showToast={showToast} />}
       />
       <Route
         path="/inventory"
@@ -52,7 +40,7 @@ export default function AppRoutes({
         }
       />
       <Route
-        path="/audit-log"
+        path="/audit"
         element={
           <AuditLogPage
             contextMode={contextMode}
@@ -62,9 +50,14 @@ export default function AppRoutes({
         }
       />
       <Route
-        path="*"
-        element={<Navigate to="/dashboard" replace />}
+        path="/audit-log"
+        element={<Navigate to="/audit" replace />}
       />
+      <Route path="/login" element={<LoginPage />} />
+      {import.meta.env.DEV && (
+        <Route path="/design" element={<DesignPage />} />
+      )}
+      <Route path="*" element={<Navigate to="/overview" replace />} />
     </Routes>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { getDashboardStats, checkBackendHealth } from "../api/client";
 
 export function useDashboardStats(contextMode) {
@@ -31,3 +31,4 @@ export function useDashboardStats(contextMode) {
 
   return { stats, backendStatus, loading, refreshStats: fetchStats };
 }
+

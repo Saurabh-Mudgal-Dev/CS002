@@ -1,7 +1,5 @@
-import React from "react";
-import { motion } from "motion/react";
+﻿import React from "react";
 import {
-  Coffee,
   HeartHandshake,
   Store,
   ShieldCheck,
@@ -40,18 +38,18 @@ export default function Topbar({
         {/* Brand Identity */}
         <div className="flex items-center justify-between w-full md:w-auto gap-3">
           <div className="flex items-center gap-3">
-            <motion.div
-              whileHover={{ rotate: 12, scale: 1.08 }}
-              transition={{ type: "spring", stiffness: 400, damping: 18 }}
+            <div
+              
+              
               className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-[#c68b3a] via-[#e8a722] to-[#f5c842] p-[1.5px] shadow-lg shadow-[#f5c842]/20 flex items-center justify-center cursor-pointer"
             >
               <div
                 className="h-full w-full rounded-[14px] flex items-center justify-center"
-                style={{ background: isLight ? "#ffffff" : "#0d0a08", color: "var(--gold-vivid)" }}
+                style={{ background: isLight ? "#ffffff" : "#0d0a08", color: "var(--accent)" }}
               >
-                <Coffee className="w-5 h-5" />
+                
               </div>
-            </motion.div>
+            </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-lg tracking-tight" style={{ color: "var(--text-primary)" }}>
@@ -84,7 +82,7 @@ export default function Topbar({
           </div>
         </div>
 
-        {/* Context Switcher — NGO vs Retail */}
+        {/* Context Switcher â€” NGO vs Retail */}
         <div
           className="flex items-center p-1 rounded-2xl border shadow-inner"
           style={{ background: "var(--bg-input)", borderColor: "var(--border-subtle)" }}
@@ -122,8 +120,8 @@ export default function Topbar({
         <div className="flex items-center gap-2 w-full md:w-auto justify-end">
 
           {/* Theme Toggle Button */}
-          <motion.button
-            whileTap={{ scale: 0.9, rotate: 180 }}
+          <button
+            
             onClick={toggleTheme}
             className="p-2.5 rounded-xl border transition-colors cursor-pointer"
             style={{
@@ -131,17 +129,17 @@ export default function Topbar({
               borderColor: "var(--border-subtle)",
               color: isLight ? "#d97706" : "#f5c842"
             }}
-            title={isLight ? "Switch to Dark Espresso Mode" : "Switch to Warm Latte Light Mode"}
+            title={isLight ? "Switch to Dark  Mode" : "Switch to Warm  Light Mode"}
           >
             {isLight ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-          </motion.button>
+          </button>
 
           {/* Role Switcher */}
           <div
             className="flex items-center gap-2 border rounded-xl px-3 py-2 text-xs"
             style={{ background: "var(--bg-input)", borderColor: "var(--border-subtle)" }}
           >
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0" style={{ color: "var(--gold-vivid)" }} />
+            <ShieldCheck className="w-3.5 h-3.5 shrink-0" style={{ color: "var(--accent)" }} />
             <span className="hidden sm:inline font-semibold" style={{ color: "var(--text-muted)" }}>Role:</span>
             <select
               value={userRole}
@@ -158,14 +156,14 @@ export default function Topbar({
           </div>
 
           {/* Low Stock Bell */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
+          <button
+            
             onClick={onViewAlerts}
             className="relative p-2.5 rounded-xl border transition-colors cursor-pointer"
             style={{
               background: "var(--bg-input)",
               borderColor: "var(--border-subtle)",
-              color: lowStockCount > 0 ? "var(--gold-vivid)" : "var(--text-muted)"
+              color: lowStockCount > 0 ? "var(--accent)" : "var(--text-muted)"
             }}
             title="Low-Stock Warnings"
           >
@@ -175,7 +173,7 @@ export default function Topbar({
                 {lowStockCount}
               </span>
             )}
-          </motion.button>
+          </button>
 
           {/* Backend Status (Desktop) */}
           <div
@@ -189,8 +187,8 @@ export default function Topbar({
           </div>
 
           {/* About Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
+          <button
+            
             onClick={onOpenAbout}
             className="p-2.5 rounded-xl border transition-colors cursor-pointer"
             style={{
@@ -201,10 +199,11 @@ export default function Topbar({
             title="System Specifications & Architecture"
           >
             <Info className="w-4 h-4" />
-          </motion.button>
+          </button>
         </div>
 
       </div>
     </header>
   );
 }
+

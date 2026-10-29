@@ -1,8 +1,7 @@
-import React from "react";
+﻿import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion } from "motion/react";
 import Topbar from "../components/layout/Topbar";
-import Toast from "../components/common/Toast";
+import Toast from "../components/ui/Toast";
 import AddItemModal from "../components/inventory/AddItemModal";
 import AdjustStockModal from "../components/inventory/AdjustStockModal";
 import EditItemModal from "../components/inventory/EditItemModal";
@@ -46,7 +45,7 @@ export default function MainLayout({
   const location = useLocation();
 
   const navItems = [
-    { path: "/dashboard", label: "Command Center", icon: TrendingUp },
+    { path: "/dashboard", label: "Overview", icon: Package },
     { path: "/inventory", label: `Catalog (${inventory.length})`, icon: Package },
     { path: "/audit-log", label: "Audit Ledger", icon: History }
   ];
@@ -84,27 +83,17 @@ export default function MainLayout({
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`relative flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-colors ${
+                  className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                     isActive
-                      ? "text-[#f5c842]"
-                      : "hover:bg-black/5"
+                      ? "bg-[var(--accent)] text-white"
+                      : "hover:bg-[var(--bg-surface)]"
                   }`}
                   style={!isActive ? { color: "var(--text-muted)" } : {}}
                 >
                   <Icon className="w-4 h-4 relative z-10 shrink-0" />
                   <span className="relative z-10 whitespace-nowrap">{item.label}</span>
 
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeTabIndicator"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                      className="absolute inset-0 rounded-2xl border shadow-sm"
-                      style={{
-                        background: "var(--badge-bg)",
-                        borderColor: "var(--badge-border)"
-                      }}
-                    />
-                  )}
+
                 </Link>
               );
             })}
@@ -121,12 +110,12 @@ export default function MainLayout({
           >
             {contextMode === "ngo" ? (
               <>
-                <HeartHandshake className="w-3.5 h-3.5" style={{ color: "var(--gold-vivid)" }} />
+                <HeartHandshake className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
                 <span>NGO Mode</span>
               </>
             ) : (
               <>
-                <Store className="w-3.5 h-3.5" style={{ color: "var(--gold-warm)" }} />
+                <Store className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
                 <span>Business Mode</span>
               </>
             )}
@@ -147,9 +136,9 @@ export default function MainLayout({
         }}
       >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 font-semibold">
-          <span>ResourceOne · Smart Inventory & Resource Operations Platform</span>
+          <span>ResourceOne Â· Smart Inventory & Resource Operations Platform</span>
           <span style={{ color: "var(--text-dim)" }}>
-            Enterprise Edition · Dual Operational NGO & Retail Architecture
+            Enterprise Edition Â· Dual Operational NGO & Retail Architecture
           </span>
         </div>
       </footer>
@@ -194,3 +183,4 @@ export default function MainLayout({
     </div>
   );
 }
+
