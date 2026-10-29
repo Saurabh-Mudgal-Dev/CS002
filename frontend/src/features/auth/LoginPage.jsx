@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./useAuth";
@@ -123,10 +123,10 @@ export default function LoginPage() {
             </div>
           </Link>
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">
               ResourceOne Workspace
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xs text-[var(--text-muted)] dark:text-[var(--text-dim)] mt-1">
               Smart Inventory & Resource Operations Architecture
             </p>
           </div>
@@ -138,13 +138,13 @@ export default function LoginPage() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
         >
-          <Card className="p-6 sm:p-7 shadow-alukaze border border-slate-200/90 dark:border-slate-800">
+          <Card className="p-6 sm:p-7 shadow-alukaze border border-[var(--border-subtle)]">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1">
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                <h2 className="text-base font-bold text-[var(--text-primary)]">
                   Sign in to your account
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[var(--text-muted)]">
                   Access your organization's real-time stock operations and ledgers.
                 </p>
               </div>
@@ -165,11 +165,11 @@ export default function LoginPage() {
 
               <div className="space-y-3.5">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-semibold text-[var(--text-secondary)]">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-dim)]" />
                     <Input
                       type="email"
                       value={email}
@@ -184,25 +184,25 @@ export default function LoginPage() {
 
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <label className="block text-xs font-semibold text-[var(--text-secondary)]">
                       Password
                     </label>
-                    <span className="text-[11px] text-slate-400 font-mono">Demo: Demo@12345</span>
+                    <span className="text-[11px] text-[var(--text-dim)] font-mono">Demo: Demo@12345</span>
                   </div>
                   <div className="relative">
-                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-dim)]" />
                     <Input
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••••••"
+                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                       className="pl-10 pr-10 text-sm"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-dim)] hover:text-[var(--text-secondary)] dark:hover:text-slate-200 cursor-pointer"
                       tabIndex={-1}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -223,10 +223,10 @@ export default function LoginPage() {
             </form>
 
             {/* Continue as Guest option */}
-            <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+            <div className="mt-5 pt-4 border-t border-[var(--border-subtle)] text-center">
               <Link
                 to="/overview"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--accent)] hover:underline"
               >
                 <Compass className="w-4 h-4" />
                 <span>Explore Interactive Showcase as Guest</span>
@@ -243,11 +243,11 @@ export default function LoginPage() {
           className="space-y-2.5"
         >
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
               <span>Quick Demo Personas</span>
             </div>
-            <span className="text-[11px] text-slate-400">Click to fill</span>
+            <span className="text-[11px] text-[var(--text-dim)]">Click to fill</span>
           </div>
 
           <div className="space-y-2">
@@ -259,16 +259,16 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.99 }}
                 transition={{ duration: 0.15 }}
                 onClick={() => handleFillDemo(acc)}
-                className="w-full text-left p-3 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-xs transition-colors flex items-center justify-between text-xs group cursor-pointer"
+                className="w-full text-left p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-xs transition-colors flex items-center justify-between text-xs group cursor-pointer"
               >
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                    <span className="font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
                       {acc.role}
                     </span>
-                    <span className="text-[11px] text-slate-400">({acc.org})</span>
+                    <span className="text-[11px] text-[var(--text-dim)]">({acc.org})</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 font-mono truncate max-w-[260px]">
+                  <div className="text-[11px] text-[var(--text-muted)] font-mono truncate max-w-[260px]">
                     {acc.email}
                   </div>
                 </div>
@@ -281,10 +281,11 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Footer info */}
-        <p className="text-center text-xs text-slate-400">
-          K.R. Mangalam University · Second Year Minor Project
+        <p className="text-center text-xs text-[var(--text-dim)]">
+          K.R. Mangalam University Â· Second Year Minor Project
         </p>
       </div>
     </div>
   );
 }
+

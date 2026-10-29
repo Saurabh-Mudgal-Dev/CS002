@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { getInventory, createItem, updateItem, deleteItem, adjustStock } from "../api/client";
 
 export function useInventory(contextMode) {
@@ -8,7 +8,6 @@ export function useInventory(contextMode) {
 
   const fetchItems = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await getInventory({ context: contextMode });
       setInventory(data);
       setError(null);
@@ -21,8 +20,28 @@ export function useInventory(contextMode) {
   }, [contextMode]);
 
   useEffect(() => {
-    fetchItems();
-  }, [fetchItems]);
+    let isMounted = true;
+    getInventory({ context: contextMode })
+      .then((data) => {
+        if (isMounted) {
+          setInventory(data);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error("Failed to load inventory:", err);
+          setError(err.message || "Failed to load inventory");
+        }
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [contextMode]);
 
   const addItem = useCallback(async (itemData) => {
     const newItem = await createItem(itemData);
@@ -62,7 +81,5 @@ export function useInventory(contextMode) {
     removeItem,
     updateStock,
     lowStockItems,
-    lowStockCount: lowStockItems.length
   };
 }
-

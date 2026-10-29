@@ -249,6 +249,72 @@ export const api = {
     },
   },
 
+  // Finance Module (Donations, Purchases, Expenses & Summary)
+  finance: {
+    async getSummary(orgType = "ngo") {
+      return request(`/finance/summary?org_type=${encodeURIComponent(orgType)}`);
+    },
+
+    async listDonations(params = {}) {
+      const query = new URLSearchParams();
+      if (params.org_type) query.set("org_type", params.org_type);
+      if (params.limit) query.set("limit", params.limit);
+      if (params.offset) query.set("offset", params.offset);
+      return request(`/donations?${query.toString()}`);
+    },
+
+    async createDonation(data) {
+      return request("/donations", {
+        method: "POST",
+        body: data,
+      });
+    },
+
+    async listPurchases(params = {}) {
+      const query = new URLSearchParams();
+      if (params.org_type) query.set("org_type", params.org_type);
+      if (params.limit) query.set("limit", params.limit);
+      if (params.offset) query.set("offset", params.offset);
+      return request(`/purchases?${query.toString()}`);
+    },
+
+    async createPurchase(data) {
+      return request("/purchases", {
+        method: "POST",
+        body: data,
+      });
+    },
+
+    async listExpenses(params = {}) {
+      const query = new URLSearchParams();
+      if (params.org_type) query.set("org_type", params.org_type);
+      if (params.limit) query.set("limit", params.limit);
+      if (params.offset) query.set("offset", params.offset);
+      return request(`/expenses?${query.toString()}`);
+    },
+
+    async createExpense(data) {
+      return request("/expenses", {
+        method: "POST",
+        body: data,
+      });
+    },
+  },
+
+  // Team & Organization Users
+  users: {
+    async listTeam(orgType = "ngo") {
+      return request(`/users?org_type=${encodeURIComponent(orgType)}`);
+    },
+
+    async updateRoleOrStatus(userId, data) {
+      return request(`/users/${userId}`, {
+        method: "PATCH",
+        body: data,
+      });
+    },
+  },
+
   // System & Health
   system: {
     async checkHealth() {

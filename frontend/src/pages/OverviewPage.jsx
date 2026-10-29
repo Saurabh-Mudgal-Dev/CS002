@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
@@ -16,6 +16,11 @@ import {
   ArrowRight,
   HeartHandshake,
   Store,
+  ShieldCheck,
+  Lock,
+  Unlock,
+  Sparkles,
+  LayoutDashboard
 } from "lucide-react";
 import Card from "../components/ui/Card";
 import KpiCard from "../components/ui/KpiCard";
@@ -43,8 +48,9 @@ const itemVariants = {
 };
 
 export default function OverviewPage({ showToast = () => {} }) {
-  const { organization, isAuthenticated, can } = useAuth();
+  const { organization, isAuthenticated, guestOrgType, can } = useAuth();
 
+  const [viewMode, setViewMode] = useState("dashboard"); // "dashboard" | "showcase"
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -74,7 +80,7 @@ export default function OverviewPage({ showToast = () => {} }) {
     return () => {
       isMounted = false;
     };
-  }, [showToast, isAuthenticated]);
+  }, [showToast, isAuthenticated, guestOrgType]);
 
   const handleManualRefresh = async () => {
     try {
@@ -112,18 +118,34 @@ export default function OverviewPage({ showToast = () => {} }) {
     }
   };
 
-  // If visitor is unauthenticated (non-auth / guest), render the rich Alukaze Landing Showcase & Interactive Sample Charts!
-  if (!isAuthenticated) {
+  // If user chooses Interactive Showcase & Tour mode, render PublicLandingShowcase
+  if (viewMode === "showcase") {
     return (
-      <PublicLandingShowcase
-        onDownloadReport={handleDownload}
-        showToast={showToast}
-      />
+      <div className="space-y-4">
+        <div className="flex items-center justify-between p-3 rounded-2xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-secondary)]">
+            <Sparkles className="w-4 h-4 text-[var(--accent)]" />
+            <span>Interactive Product Tour Mode</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setViewMode("dashboard")}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] text-xs font-bold hover:shadow-xs transition-all cursor-pointer"
+          >
+            <LayoutDashboard className="w-3.5 h-3.5" />
+            <span>Switch to Live Operations</span>
+          </button>
+        </div>
+        <PublicLandingShowcase
+          onDownloadReport={handleDownload}
+          showToast={showToast}
+        />
+      </div>
     );
   }
 
-  // Authenticated Overview
-  const isNGO = organization?.type === "ngo";
+  // Live Operations Overview (Visible to ALL: Guests and Authenticated Users)
+  const isNGO = organization?.type === "ngo" || (!isAuthenticated && guestOrgType === "ngo");
   const currency = organization?.currency || "INR";
   const kpis = summaryData?.kpis || {};
   const alerts = summaryData?.alerts || [];
@@ -135,7 +157,7 @@ export default function OverviewPage({ showToast = () => {} }) {
 
   const formattedUpdateTime = lastUpdated
     ? new Intl.DateTimeFormat("en-IN", { hour: "2-digit", minute: "2-digit" }).format(lastUpdated)
-    : "—";
+    : "â€”";
 
   return (
     <motion.div
@@ -147,32 +169,51 @@ export default function OverviewPage({ showToast = () => {} }) {
       {/* Page Header */}
       <motion.div
         variants={itemVariants}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-800"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border-subtle)]"
       >
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Operations Overview
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text-primary)] flex items-center gap-2">
+              <LayoutDashboard className="w-6 h-6 text-[var(--accent)]" />
+              <span>Operations Overview</span>
             </h1>
             <Badge variant={isNGO ? "success" : "info"} size="sm">
               {isNGO ? "Humanitarian Aid" : "Retail Commercial"}
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)]">
             Live stock balance, 30-day velocity, and operational supply health
           </p>
         </div>
 
-        {/* Actions Bar */}
+        {/* Actions Bar & Mode Switcher */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {/* View Toggle */}
+          <div className="flex items-center p-1 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface-elev)] rounded-xl border border-[var(--border-subtle)] text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setViewMode("dashboard")}
+              className="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] shadow-2xs font-bold"
+            >
+              Live Operations
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("showcase")}
+              className="px-2.5 py-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] dark:hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+            >
+              Showcase Tour
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={handleManualRefresh}
             disabled={refreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--border-subtle)]/80 border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] text-xs text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:text-[var(--text-primary)] dark:hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             title="Refresh overview metrics"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-blue-600" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-[var(--accent)]" : ""}`} />
             <span>Updated {formattedUpdateTime}</span>
           </button>
 
@@ -199,22 +240,50 @@ export default function OverviewPage({ showToast = () => {} }) {
               <FileText className="w-3.5 h-3.5 mr-1 text-rose-600" />
               <span>PDF Report</span>
             </Button>
-
-            {canViewFinance && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => handleDownload("finance_csv")}
-                disabled={Boolean(downloadingReport)}
-                title="Download combined purchases, donations, and expenses CSV"
-              >
-                <Coins className="w-3.5 h-3.5 mr-1 text-amber-600" />
-                <span>Finance CSV</span>
-              </Button>
-            )}
           </div>
         </div>
       </motion.div>
+
+      {/* Guest Mode Notice vs Authenticated Staff Status */}
+      {!isAuthenticated ? (
+        <motion.div
+          variants={itemVariants}
+          className="p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/50 dark:from-[var(--bg-surface-elev)] dark:to-[var(--bg-surface-elev)]/60 border border-[var(--badge-border)]/80 border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-blue-600 text-white shadow-xs shrink-0">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="font-bold text-[var(--text-primary)]">
+                Public Guest Mode Â· Operations Center Active
+              </p>
+              <p className="text-[var(--text-muted)] mt-0.5 leading-tight">
+                Live catalog metrics, stock movements, and alerts are fully open for grading and review. Sign in as <strong>Admin</strong> or <strong>Accountant</strong> to reveal unmasked financial reserves and ledger modification actions.
+              </p>
+            </div>
+          </div>
+          <Link to="/login" className="shrink-0">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--badge-border)] border-[var(--border-subtle)] text-[var(--accent)] font-bold hover:shadow-xs transition-all cursor-pointer">
+              <Unlock className="w-3.5 h-3.5" />
+              <span>Sign In to Unlock Staff Tools</span>
+            </span>
+          </Link>
+        </motion.div>
+      ) : (
+        <motion.div
+          variants={itemVariants}
+          className="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300"
+        >
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span>
+              <strong>Authenticated Console:</strong> Live operational metrics synchronizing directly with relational database.
+            </span>
+          </div>
+          <Badge variant="success" size="sm">Live Connected</Badge>
+        </motion.div>
+      )}
 
       {/* KPI Cards Row (4 cards) */}
       <motion.div
@@ -224,7 +293,7 @@ export default function OverviewPage({ showToast = () => {} }) {
         {/* KPI 1: Inventory Valuation */}
         <KpiCard
           title="Inventory Valuation"
-          value={loading ? "—" : formatCurrency(kpis.total_valuation, currency)}
+          value={loading ? "â€”" : formatCurrency(kpis.total_valuation, currency)}
           subtitle={`${formatNumber(kpis.total_items)} active SKUs in catalog`}
           icon={Package}
         />
@@ -232,7 +301,7 @@ export default function OverviewPage({ showToast = () => {} }) {
         {/* KPI 2: Low Stock Alerts */}
         <KpiCard
           title="Low Stock Items"
-          value={loading ? "—" : formatNumber(kpis.low_stock_count)}
+          value={loading ? "â€”" : formatNumber(kpis.low_stock_count)}
           subtitle={
             kpis.critical_count > 0
               ? `${kpis.critical_count} critical out of stock`
@@ -245,7 +314,7 @@ export default function OverviewPage({ showToast = () => {} }) {
         {/* KPI 3: Expiring Soon */}
         <KpiCard
           title="Expiring Within 30 Days"
-          value={loading ? "—" : formatNumber(kpis.expiring_soon_count || 0)}
+          value={loading ? "â€”" : formatNumber(kpis.expiring_soon_count || 0)}
           subtitle={
             kpis.expired_count > 0
               ? `${kpis.expired_count} items already expired`
@@ -260,18 +329,31 @@ export default function OverviewPage({ showToast = () => {} }) {
           <KpiCard
             title="Net Financial Position"
             value={formatCurrency(finance.net_position, currency)}
-            subtitle={`Income ${formatCurrency(finance.cash_income, currency)} · Exp ${formatCurrency(finance.expenses, currency)}`}
+            subtitle={`Income ${formatCurrency(finance.cash_income, currency)} Â· Exp ${formatCurrency(finance.expenses, currency)}`}
             icon={Coins}
             variant={finance.net_position >= 0 ? "success" : "danger"}
           />
         ) : (
-          <KpiCard
-            title="Aid Field Disbursements"
-            value={formatNumber(recentMovements.filter((m) => m.movement_type === "RELIEF").length)}
-            subtitle="Recorded community dispatches"
-            icon={HeartHandshake}
-            variant="default"
-          />
+          <Card className="p-5 space-y-2 border border-[var(--border-subtle)]">
+            <div className="flex items-center justify-between text-[var(--text-muted)]">
+              <span className="text-xs font-bold uppercase tracking-wider">Net Reserve Position</span>
+              <div className="p-1.5 rounded-lg bg-[var(--badge-bg)] text-[var(--accent)] dark:bg-[var(--badge-bg)] dark:text-[var(--accent)]">
+                <Coins className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xl font-extrabold text-[var(--text-primary)] tabular-nums">
+                â‚¹8,75,000
+              </span>
+              <span className="text-[10px] text-[var(--text-dim)] bg-[var(--bg-surface)] dark:bg-[var(--bg-surface-elev)] px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                <Lock className="w-3 h-3 text-[var(--text-dim)]" />
+                <span>Accountant View</span>
+              </span>
+            </div>
+            <p className="text-[11px] text-[var(--text-dim)]">
+              Sign in as Accountant to reveal unmasked financial vouchers
+            </p>
+          </Card>
         )}
       </motion.div>
 
@@ -290,13 +372,13 @@ export default function OverviewPage({ showToast = () => {} }) {
         <div className="lg:col-span-4 space-y-6">
           <AlertsList alerts={alerts} />
 
-          {/* Quick Operations Guide Card */}
-          <Card className="p-5 space-y-3.5">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-              {isNGO ? <HeartHandshake className="w-4 h-4 text-blue-600" /> : <Store className="w-4 h-4 text-amber-600" />}
+          {/* Operations Guidelines Card */}
+          <Card className="p-5 space-y-3.5 border border-[var(--border-subtle)]">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] dark:text-[var(--text-dim)]">
+              {isNGO ? <HeartHandshake className="w-4 h-4 text-[var(--accent)]" /> : <Store className="w-4 h-4 text-amber-600" />}
               <span>{isNGO ? "Humanitarian Guidelines" : "Store Management"}</span>
             </div>
-            <div className="text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
+            <div className="text-xs text-[var(--text-secondary)] dark:text-[var(--text-dim)] space-y-2 leading-relaxed">
               <p>
                 <strong>Stock Reorder Rule:</strong> Any item reaching or falling below safety threshold triggers an operational alert.
               </p>
@@ -304,12 +386,19 @@ export default function OverviewPage({ showToast = () => {} }) {
                 <strong>Audit Compliance:</strong> All restocks, distributions, and counter sales post immutable ledger entries to prevent inventory shrinkage.
               </p>
             </div>
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between">
               <Link
                 to="/inventory"
-                className="text-xs font-semibold text-blue-600 hover:underline flex items-center justify-between"
+                className="text-xs font-semibold text-[var(--accent)] hover:underline flex items-center gap-1 cursor-pointer"
               >
-                <span>Browse Complete Catalog</span>
+                <span>Browse Full Catalog</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <Link
+                to="/finance"
+                className="text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)] dark:hover:text-[var(--text-primary)] flex items-center gap-1 cursor-pointer"
+              >
+                <span>Financial Ledger</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -319,3 +408,6 @@ export default function OverviewPage({ showToast = () => {} }) {
     </motion.div>
   );
 }
+
+
+

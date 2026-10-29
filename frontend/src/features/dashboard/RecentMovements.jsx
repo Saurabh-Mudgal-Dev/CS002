@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { History, ArrowRight } from "lucide-react";
 import Card from "../../components/ui/Card";
 import Badge from "../../components/ui/Badge";
@@ -23,17 +23,17 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
   };
 
   return (
-    <Card className="p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 space-y-4">
+    <Card className="p-5 sm:p-6 border border-[var(--border-subtle)] space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <History className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+          <History className="w-4 h-4 text-[var(--accent)]" />
+          <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
             Recent Stock Movements
           </h2>
         </div>
         <Link
           to="/audit"
-          className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+          className="text-xs font-semibold text-[var(--accent)] hover:underline flex items-center gap-1"
         >
           <span>Audit Ledger</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -41,14 +41,14 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
       </div>
 
       {!hasMovements ? (
-        <div className="py-8 text-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+        <div className="py-8 text-center text-xs text-[var(--text-dim)] border border-dashed border-[var(--border-subtle)] rounded-2xl">
           No stock adjustments logged yet.
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-medium">
+              <tr className="border-b border-[var(--border-subtle)] text-[var(--text-dim)] font-medium">
                 <th className="pb-2.5 font-semibold">Action</th>
                 <th className="pb-2.5 font-semibold">Item & SKU</th>
                 <th className="pb-2.5 font-semibold text-right">Quantity</th>
@@ -57,25 +57,25 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
                 <th className="pb-2.5 font-semibold text-right">Time</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-[var(--border-subtle)]">
               {movements.slice(0, 7).map((m) => {
                 const badge = getMovementBadge(m.movement_type);
                 const delta = m.quantity_delta;
                 const isPositive = delta > 0;
 
                 return (
-                  <tr key={m.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                  <tr key={m.id} className="hover:bg-[var(--bg-surface)] dark:hover:bg-[var(--bg-surface)]/50 transition-colors">
                     <td className="py-2.5">
                       <Badge variant={badge.variant} size="sm">
                         {badge.label}
                       </Badge>
                     </td>
                     <td className="py-2.5 min-w-[160px]">
-                      <div className="font-semibold text-slate-900 dark:text-white truncate max-w-[200px]">
+                      <div className="font-semibold text-[var(--text-primary)] truncate max-w-[200px]">
                         {m.item_name || m.summary}
                       </div>
                       {m.sku && (
-                        <div className="text-[10px] font-mono text-slate-400">
+                        <div className="text-[10px] font-mono text-[var(--text-dim)]">
                           {m.sku}
                         </div>
                       )}
@@ -85,13 +85,13 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
                         {isPositive ? `+${formatNumber(delta)}` : formatNumber(delta)}
                       </span>
                     </td>
-                    <td className="py-2.5 text-right text-slate-500 tabular-nums">
-                      {m.total_value ? formatCurrency(m.total_value, currency) : "—"}
+                    <td className="py-2.5 text-right text-[var(--text-muted)] tabular-nums">
+                      {m.total_value ? formatCurrency(m.total_value, currency) : "â€”"}
                     </td>
-                    <td className="py-2.5 text-right text-slate-400 truncate max-w-[100px]">
+                    <td className="py-2.5 text-right text-[var(--text-dim)] truncate max-w-[100px]">
                       {m.actor_name || "System"}
                     </td>
-                    <td className="py-2.5 text-right text-slate-400 whitespace-nowrap">
+                    <td className="py-2.5 text-right text-[var(--text-dim)] whitespace-nowrap">
                       {formatTimeAgo(m.created_at)}
                     </td>
                   </tr>
@@ -104,3 +104,4 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
     </Card>
   );
 }
+

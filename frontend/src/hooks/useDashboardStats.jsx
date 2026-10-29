@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getDashboardStats, checkBackendHealth } from "../api/client";
 
 export function useDashboardStats(contextMode) {
@@ -8,7 +8,6 @@ export function useDashboardStats(contextMode) {
 
   const fetchStats = useCallback(async () => {
     try {
-      setLoading(true);
       const [healthData, statsData] = await Promise.all([
         checkBackendHealth(),
         getDashboardStats(contextMode)
@@ -24,11 +23,33 @@ export function useDashboardStats(contextMode) {
   }, [contextMode]);
 
   useEffect(() => {
-    fetchStats();
+    let isMounted = true;
+    Promise.all([
+      checkBackendHealth(),
+      getDashboardStats(contextMode)
+    ])
+      .then(([healthData, statsData]) => {
+        if (isMounted) {
+          setBackendStatus(healthData.status === "healthy" ? "healthy" : "offline");
+          setStats(statsData);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error("Failed to load dashboard stats:", err);
+          setBackendStatus("offline");
+        }
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
     const interval = setInterval(fetchStats, 12000);
-    return () => clearInterval(interval);
-  }, [fetchStats]);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [contextMode, fetchStats]);
 
   return { stats, backendStatus, loading, refreshStats: fetchStats };
 }
-

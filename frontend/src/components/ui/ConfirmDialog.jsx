@@ -29,29 +29,29 @@ export default function ConfirmDialog({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className={`relative z-10 w-full max-w-md rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl ${className}`}
+            className={`relative z-10 w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] p-6 shadow-2xl ${className}`}
             role="dialog"
             aria-modal="true"
           >
             <div className="flex items-start gap-3.5 mb-4">
               {danger && (
-                <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-rose-50/70 text-rose-700 dark:bg-rose-950/30 dark:text-rose-400 flex items-center justify-center shrink-0">
                   <AlertCircle className="w-5 h-5" />
                 </div>
               )}
               <div className="space-y-1">
-                <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                <h3 className="font-bold text-[var(--text-primary)] text-base">
                   {title}
                 </h3>
                 {message && (
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed">
                     {message}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex justify-end gap-2.5 pt-2 border-t border-[var(--border-subtle)]">
               <Button
                 variant="secondary"
                 size="sm"

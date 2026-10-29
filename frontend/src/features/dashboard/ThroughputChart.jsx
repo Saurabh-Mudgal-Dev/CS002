@@ -1,4 +1,4 @@
-import {
+﻿import {
   ResponsiveContainer,
   AreaChart,
   Area,
@@ -18,11 +18,11 @@ function CustomTooltip({ active, payload, label }) {
     const net = intake - outflow;
 
     return (
-      <div className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg text-xs space-y-1.5 min-w-[150px]">
-        <p className="font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-1">
+      <div className="p-3 bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] rounded-xl shadow-lg text-xs space-y-1.5 min-w-[150px]">
+        <p className="font-bold text-[var(--text-primary)] border-b border-[var(--border-subtle)] pb-1">
           {label}
         </p>
-        <div className="flex items-center justify-between text-blue-600 dark:text-blue-400 font-semibold">
+        <div className="flex items-center justify-between text-[var(--accent)] font-semibold">
           <span>Intake:</span>
           <span className="tabular-nums">+{formatNumber(intake)}</span>
         </div>
@@ -30,8 +30,8 @@ function CustomTooltip({ active, payload, label }) {
           <span>Outflow:</span>
           <span className="tabular-nums">-{formatNumber(outflow)}</span>
         </div>
-        <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 font-bold">
-          <span className="text-slate-500">Net Delta:</span>
+        <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] font-bold">
+          <span className="text-[var(--text-muted)]">Net Delta:</span>
           <span className={`tabular-nums ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
             {net >= 0 ? `+${formatNumber(net)}` : formatNumber(net)}
           </span>
@@ -49,22 +49,22 @@ export default function ThroughputChart({ data = [], isNGO = true }) {
   const outflowLabel = isNGO ? "Relief Disbursements" : "Customer Sales";
 
   return (
-    <Card className="p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 space-y-4">
+    <Card className="p-5 sm:p-6 border border-[var(--border-subtle)] space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+            <Activity className="w-4 h-4 text-[var(--accent)]" />
+            <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
               Stock Velocity & Throughput
             </h2>
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[var(--text-muted)]">
             Daily intake vs. distribution volume over the past 30 days
           </p>
         </div>
 
         <div className="flex items-center gap-4 text-xs font-semibold">
-          <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+          <div className="flex items-center gap-1.5 text-[var(--accent)]">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
             <span>Intake</span>
           </div>
@@ -77,7 +77,7 @@ export default function ThroughputChart({ data = [], isNGO = true }) {
 
       <div className="h-[260px] w-full pt-2">
         {chartData.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-xs text-slate-400 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+          <div className="h-full flex items-center justify-center text-xs text-[var(--text-dim)] border border-dashed border-[var(--border-subtle)] rounded-xl">
             No stock movement history recorded for this period.
           </div>
         ) : (
@@ -132,3 +132,4 @@ export default function ThroughputChart({ data = [], isNGO = true }) {
     </Card>
   );
 }
+

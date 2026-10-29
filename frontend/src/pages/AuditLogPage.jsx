@@ -1,8 +1,12 @@
-﻿import React, { useState, useEffect, useMemo, useCallback } from "react";
+﻿import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../features/auth/useAuth";
+import { api } from "../lib/api";
+import { formatTimeAgo, formatDate } from "../lib/format";
+import { PERMISSIONS } from "../lib/permissions";
 import {
   History,
   Search,
-  Filter,
   RefreshCw,
   Download,
   ArrowUpRight,
@@ -11,305 +15,324 @@ import {
   Edit,
   Trash2,
   ShieldCheck,
-  Calendar
+  Lock,
+  Unlock,
+  Key
 } from "lucide-react";
-import { getActivityLogs, downloadCSVUrl } from "../api/client";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+import Badge from "../components/ui/Badge";
 
-export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
+export default function AuditLogPage({ contextMode = "ngo", userRole = "Guest", onExportCSV }) {
+  const { isAuthenticated, can } = useAuth();
   const isNGO = contextMode === "ngo";
+
   const [logs, setLogs] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("All");
 
-  const fetchLogs = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await getActivityLogs({
-        action_type: actionFilter,
-        search: search.trim() || undefined,
-        limit: 100
-      });
-      setLogs(data.items || []);
-      setTotalCount(data.total || 0);
-    } catch (err) {
-      console.error("Failed to fetch activity logs:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [actionFilter, search]);
+  const canViewForensics = can(PERMISSIONS.VIEW_AUDIT);
 
   useEffect(() => {
-    fetchLogs();
-  }, [fetchLogs]);
+    let isMounted = true;
+
+    api.activities.list({
+      action_type: actionFilter,
+      search: search.trim() || undefined,
+      limit: 100,
+    })
+      .then((data) => {
+        if (isMounted) {
+          setLogs(data?.items || []);
+          setTotalCount(data?.total || 0);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error("Failed to load activity logs:", err);
+        }
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [actionFilter, search]);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    api.activities.list({
+      action_type: actionFilter,
+      search: search.trim() || undefined,
+      limit: 100,
+    })
+      .then((data) => {
+        setLogs(data?.items || []);
+        setTotalCount(data?.total || 0);
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  };
 
   const actionCategories = [
     { key: "All", label: "All Movements" },
-    { key: "RESTOCK", label: "Restocks & Intake" },
+    { key: "RESTOCK", label: "Restocks & Inflow" },
     { key: isNGO ? "RELIEF_DISTRIBUTION" : "SALE", label: isNGO ? "Relief Dispatched" : "Customer Sales" },
-    { key: "ITEM_CREATED", label: "Catalog Additions" },
-    { key: "ITEM_UPDATED", label: "Modifications" },
+    { key: "ITEM_CREATED", label: "SKU Created" },
+    { key: "ITEM_UPDATED", label: "Modified" },
     { key: "ITEM_DELETED", label: "Decommissioned" }
   ];
 
   const getActionBadge = (actionType) => {
-    switch (actionType) {
+    switch (actionType?.toUpperCase()) {
       case "RESTOCK":
         return {
           label: "Restock",
           icon: ArrowUpRight,
-          classes: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25"
+          variant: "success",
         };
       case "RELIEF_DISTRIBUTION":
         return {
           label: "Relief Aid",
           icon: ArrowDownRight,
-          classes: "bg-amber-500/15 text-amber-400 border-amber-500/25"
+          variant: "warning",
         };
       case "SALE":
         return {
           label: "Counter Sale",
           icon: ArrowDownRight,
-          classes: "bg-amber-500/15 text-amber-300 border-amber-500/25"
+          variant: "info",
         };
       case "ITEM_CREATED":
         return {
           label: "SKU Created",
           icon: PlusCircle,
-          classes: "bg-cyan-500/15 text-cyan-400 border-cyan-500/25"
+          variant: "info",
         };
       case "ITEM_UPDATED":
         return {
-          label: "SKU Updated",
+          label: "Modified",
           icon: Edit,
-          classes: "bg-blue-500/15 text-blue-400 border-blue-500/25"
+          variant: "neutral",
         };
       case "ITEM_DELETED":
         return {
-          label: "SKU Deleted",
+          label: "Deleted",
           icon: Trash2,
-          classes: "bg-rose-500/15 text-rose-400 border-rose-500/25"
+          variant: "danger",
         };
       default:
         return {
-          label: actionType,
+          label: actionType || "Movement",
           icon: History,
-          classes: "bg-stone-500/15 text-stone-300 border-stone-500/25"
+          variant: "neutral",
         };
     }
   };
 
   return (
-    <div
-      
-      
-      
-      className="space-y-4"
-    >
+    <div className="space-y-6">
       {/* Page Header */}
-      <div
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6   border shadow-2xl"
-        style={{ borderColor: "var(--border-subtle)", background: "var(--bg-card)" }}
-      >
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border-subtle)]">
         <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <span
-              className="p-2.5 rounded-2xl border"
-              style={{
-                background: "var(--badge-bg)",
-                color: "var(--accent)",
-                borderColor: "var(--badge-border)"
-              }}
-            >
-              <History className="w-5 h-5" />
-            </span>
-            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight" style={{ color: "var(--text-primary)" }}>
-              Audit Ledger & Movement History
-            </h2>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text-primary)] flex items-center gap-2">
+              <History className="w-6 h-6 text-[var(--accent)]" />
+              <span>Immutable Audit Trail & Forensics</span>
+            </h1>
+            <Badge variant="accent" size="sm">Append-Only</Badge>
           </div>
-          <p className="text-xs font-medium max-w-xl" style={{ color: "var(--text-muted)" }}>
-            Tamper-evident activity trail recording all stock intakes, disbursements, counter sales, and catalog governance.
+          <p className="text-xs sm:text-sm text-[var(--text-muted)]">
+            Showing <strong className="text-[var(--text-primary)]">{logs.length}</strong> of {totalCount || logs.length} tracked activity ledger vouchers
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
-          <button
-            
-            onClick={fetchLogs}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleRefresh}
             disabled={loading}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer"
-            style={{
-              background: "var(--bg-input)",
-              borderColor: "var(--border-subtle)",
-              color: "var(--text-secondary)"
-            }}
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>Refresh</span>
-          </button>
+            <RefreshCw className={`w-3.5 h-3.5 mr-1 ${loading ? "animate-spin text-[var(--accent)]" : ""}`} />
+            <span>Sync Ledger</span>
+          </Button>
 
-          <button
-            
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={onExportCSV}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer"
-            style={{
-              background: "var(--bg-input)",
-              borderColor: "var(--border-subtle)",
-              color: "var(--text-secondary)"
-            }}
+            title="Download CSV Audit Sheet"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export Audit CSV</span>
-          </button>
+            <Download className="w-3.5 h-3.5 mr-1 text-emerald-600" />
+            <span>Export CSV</span>
+          </Button>
         </div>
       </div>
+
+      {/* Guest Mode Banner vs Authenticated Forensic Unlocked Notice */}
+      {!isAuthenticated ? (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/50 dark:from-[var(--bg-surface-elev)] dark:to-[var(--bg-surface-elev)]/60 border border-[var(--badge-border)]/80 border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-blue-600 text-white shadow-xs shrink-0">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="font-bold text-[var(--text-primary)]">
+                Public Ledger Transparency Active
+              </p>
+              <p className="text-[var(--text-muted)] mt-0.5 leading-tight">
+                All operational stock movements, items, quantities, and timestamps are publicly auditable. Sign in as <strong>Admin</strong> or <strong>Manager</strong> to unlock raw client IPv6 forensic signatures and cryptographically verified actor hashes.
+              </p>
+            </div>
+          </div>
+          <Link to="/login" className="shrink-0">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--badge-border)] border-[var(--border-subtle)] text-[var(--accent)] font-bold hover:shadow-xs transition-all cursor-pointer">
+              <Unlock className="w-3.5 h-3.5" />
+              <span>Sign In as Admin</span>
+            </span>
+          </Link>
+        </div>
+      ) : (
+        <div className="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300">
+          <div className="flex items-center gap-2">
+            <Key className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span>
+              <strong>Forensic Audit Unlocked:</strong> Raw network client IPs, actor identifiers, and verification signatures accessible to <strong>{userRole}</strong>.
+            </span>
+          </div>
+          <Badge variant="success" size="sm">Forensics Active</Badge>
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--text-dim)" }} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-dim)]" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by item name, note, or operator..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl border text-xs transition-colors focus:outline-none focus:border-[#f5c842]/40"
-            style={{
-              background: "var(--bg-input)",
-              borderColor: "var(--border-subtle)",
-              color: "var(--text-primary)"
-            }}
+            placeholder="Search audit trail by item, actor, or notes..."
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all shadow-xs"
           />
         </div>
 
-        {/* Action Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-          {actionCategories.map((cat) => (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+          {actionCategories.map((c) => (
             <button
-              key={cat.key}
-              onClick={() => setActionFilter(cat.key)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap border ${
-                actionFilter === cat.key
-                  ? "bg-gradient-to-r from-[#f5c842] to-[#e8a722] text-[#0d0900] border-transparent shadow-md shadow-[#f5c842]/20 font-black"
-                  : "border text-xs"
+              key={c.key}
+              type="button"
+              onClick={() => setActionFilter(c.key)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap border ${
+                actionFilter === c.key
+                  ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] border-[var(--border-subtle)] dark:border-[var(--border-hot)] shadow-xs"
+                  : "bg-[var(--bg-surface-elev)] border-[var(--border-subtle)] text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:bg-[var(--row-hover)]"
               }`}
-              style={
-                actionFilter !== cat.key
-                  ? {
-                      background: "var(--bg-input)",
-                      borderColor: "var(--border-subtle)",
-                      color: "var(--text-muted)"
-                    }
-                  : {}
-              }
             >
-              {cat.label}
+              {c.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Ledger Table */}
-      <div
-        className="  overflow-hidden border shadow-2xl"
-        style={{ borderColor: "var(--border-subtle)", background: "var(--bg-card)" }}
-      >
+      {/* Audit Log Table */}
+      <Card className="overflow-hidden border border-[var(--border-subtle)] shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr
-                className="border-b uppercase font-bold tracking-wider text-[10px]"
-                style={{
-                  background: "var(--table-header-bg)",
-                  borderColor: "var(--border-subtle)",
-                  color: "var(--text-muted)"
-                }}
-              >
-                <th className="py-3.5 px-5">Timestamp</th>
-                <th className="py-3.5 px-3">Action Type</th>
-                <th className="py-3.5 px-4">Item & Context</th>
-                <th className="py-3.5 px-3 text-right">Quantity Delta</th>
-                <th className="py-3.5 px-4">Reference Note</th>
-                <th className="py-3.5 px-5 text-right">Operator</th>
+              <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/60 dark:bg-[var(--bg-surface-elev)]/40 uppercase font-semibold tracking-wider text-[10px] text-[var(--text-dim)]">
+                <th className="py-3 px-4">Action</th>
+                <th className="py-3 px-4">Item & SKU Reference</th>
+                <th className="py-3 px-3 text-right">Stock Impact</th>
+                <th className="py-3 px-4">Context Note / Reason</th>
+                <th className="py-3 px-4">Authorized Actor</th>
+                <th className="py-3 px-4">Network Forensic IP</th>
+                <th className="py-3 px-4 text-right">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: "var(--border-subtle)" }}>
+            <tbody className="divide-y divide-[var(--border-subtle)]">
               {logs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-12 text-sm font-semibold" style={{ color: "var(--text-dim)" }}>
-                    {loading ? "Loading audit records..." : "No matching activity movements found."}
+                  <td colSpan={7} className="text-center py-12 text-sm text-[var(--text-dim)] font-medium">
+                    {loading ? "Loading audit records..." : "No activity logs match the selected filter."}
                   </td>
                 </tr>
               ) : (
                 logs.map((log) => {
                   const badge = getActionBadge(log.action_type);
-                  const Icon = badge.icon;
-                  const dateObj = new Date(log.timestamp);
-                  const formattedDate = dateObj.toLocaleDateString([], {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric"
-                  });
-                  const formattedTime = dateObj.toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                  });
+                  const isPositive = log.quantity_delta > 0;
 
                   return (
-                    <tr
-                      key={log.id}
-                      className="transition-colors hover:bg-black/5"
-                      style={{ color: "var(--text-secondary)" }}
-                    >
-                      {/* Timestamp */}
-                      <td className="py-3.5 px-5 whitespace-nowrap">
-                        <div className="font-semibold" style={{ color: "var(--text-primary)" }}>{formattedDate}</div>
-                        <div className="text-[10px] font-mono" style={{ color: "var(--text-muted)" }}>{formattedTime}</div>
-                      </td>
-
+                    <tr key={log.id} className="transition-colors hover:bg-[var(--row-hover)]">
                       {/* Action Badge */}
-                      <td className="py-3.5 px-3 whitespace-nowrap">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold border ${badge.classes}`}>
-                          <Icon className="w-3 h-3" />
-                          <span>{badge.label}</span>
-                        </span>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <Badge variant={badge.variant} size="sm">
+                          {badge.label}
+                        </Badge>
                       </td>
 
-                      {/* Item */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold" style={{ color: "var(--text-primary)" }}>{log.item_name}</div>
-                      </td>
-
-                      {/* Quantity Delta */}
-                      <td className="py-3.5 px-3 text-right font-mono font-black tabular-nums">
-                        {log.quantity_change > 0 ? (
-                          <span className="text-emerald-400">+{log.quantity_change}</span>
-                        ) : log.quantity_change < 0 ? (
-                          <span className="text-rose-400">{log.quantity_change}</span>
-                        ) : (
-                          <span style={{ color: "var(--text-dim)" }}>â€”</span>
+                      {/* Item & SKU */}
+                      <td className="py-3 px-4">
+                        <div className="font-bold text-[var(--text-primary)]">
+                          {log.item_name || "General Catalog"}
+                        </div>
+                        {log.sku && (
+                          <div className="text-[10px] font-mono text-[var(--text-dim)]">
+                            {log.sku}
+                          </div>
                         )}
                       </td>
 
-                      {/* Note */}
-                      <td className="py-3.5 px-4 max-w-xs truncate text-xs" style={{ color: "var(--text-secondary)" }}>
-                        {log.note || "Standard operational adjustment"}
+                      {/* Stock Impact */}
+                      <td className="py-3 px-3 text-right font-bold tabular-nums">
+                        {log.quantity_delta !== 0 ? (
+                          <span className={isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}>
+                            {isPositive ? `+${log.quantity_delta}` : log.quantity_delta}
+                          </span>
+                        ) : (
+                          <span className="text-[var(--text-dim)]">â€”</span>
+                        )}
                       </td>
 
-                      {/* Performed By */}
-                      <td className="py-3.5 px-5 text-right whitespace-nowrap">
-                        <span
-                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[11px] font-semibold"
-                          style={{
-                            background: "var(--bg-input)",
-                            borderColor: "var(--border-subtle)",
-                            color: "var(--text-secondary)"
-                          }}
-                        >
-                          <ShieldCheck className="w-3 h-3" style={{ color: "var(--accent)" }} />
-                          <span>{log.performed_by || "System"}</span>
-                        </span>
+                      {/* Note / Details */}
+                      <td className="py-3 px-4 max-w-xs text-[var(--text-secondary)]">
+                        <p className="truncate" title={log.details || log.note}>
+                          {log.details || log.note || "Standard operational entry"}
+                        </p>
+                      </td>
+
+                      {/* Actor */}
+                      <td className="py-3 px-4 text-[var(--text-primary)] font-medium whitespace-nowrap">
+                        {log.performed_by || "System Core"}
+                      </td>
+
+                      {/* Forensic IP (FEATURE: Auth reveals raw IP, Guest sees masked) */}
+                      <td className="py-3 px-4 font-mono text-[11px] whitespace-nowrap">
+                        {isAuthenticated && canViewForensics ? (
+                          <span className="text-[var(--text-secondary)] font-semibold">
+                            {log.ip_address || "127.0.0.1"}
+                          </span>
+                        ) : (
+                          <span className="text-[var(--text-dim)] flex items-center gap-1" title="Sign in as Admin to reveal client forensic IP">
+                            <Lock className="w-3 h-3 text-[var(--text-dim)]" />
+                            <span>192.168.***.***</span>
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Timestamp */}
+                      <td className="py-3 px-4 text-right text-[var(--text-dim)] whitespace-nowrap">
+                        <div className="text-[var(--text-secondary)] font-medium">
+                          {formatTimeAgo(log.timestamp)}
+                        </div>
+                        <div className="text-[10px] text-[var(--text-dim)]">
+                          {formatDate(log.timestamp)}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -318,8 +341,10 @@ export default function AuditLogPage({ contextMode, userRole, onExportCSV }) {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
+
+
 
