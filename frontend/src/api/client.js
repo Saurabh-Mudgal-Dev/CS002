@@ -113,44 +113,55 @@ export async function createItem(itemData) {
   }
 }
 
-export async function adjustStock(itemId, { adjustment_type, quantity, note, performed_by }) {
-  try {
-    const res = await fetch(`${API_BASE}/inventory/${itemId}/adjust`, {
+export async function adjustStock(
+  itemId,
+  { adjustment_type, movement_type, quantity, note }
+) {
+  let type = (movement_type || adjustment_type || "")
+    .toUpperCase()
+    .trim();
+
+  if (type === "RELIEF_DISTRIBUTION") {
+    type = "RELIEF";
+  }
+
+  if (!["RESTOCK", "RELIEF", "SALE"].includes(type)) {
+    throw new Error("Invalid stock movement type.");
+  }
+
+  const response = await fetch(
+    `${API_BASE}/v1/items/${itemId}/movements`,
+    {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ adjustment_type, quantity, note, performed_by }),
-      signal: AbortSignal.timeout(3000)
-    });
-    if (res.ok) {
-      backendActive = true;
-      return await res.json();
+      body: JSON.stringify({
+        movement_type: type,
+        quantity: Number(quantity),
+        note: note || ""
+      }),
+      signal: AbortSignal.timeout(5000)
     }
-    const err = await res.json();
-    throw new Error(err.detail || "Failed to adjust stock");
-  } catch (error) {
-    if (backendActive) throw error;
-    // Local fallback
-    const item = localInventory.find(i => i.id === itemId);
-    if (!item) throw new Error("Item not found");
-    const delta = adjustment_type === "RESTOCK" ? quantity : -quantity;
-    if (delta < 0 && item.quantity < Math.abs(delta)) {
-      throw new Error(`Insufficient stock! Available: ${item.quantity}`);
-    }
-    item.quantity += delta;
-    item.status = item.quantity <= 0 ? "Critical" : item.quantity <= item.reorder_level ? "Low Stock" : "In Stock";
+  );
 
-    localLogs.unshift({
-      id: Date.now(),
-      action_type: adjustment_type,
-      item_name: item.name,
-      quantity_change: delta,
-      note: note || adjustment_type,
-      performed_by: performed_by || "Manager",
-      timestamp: new Date().toISOString()
-    });
-    return item;
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const detail = data.detail;
+
+    const message =
+      typeof detail === "string"
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((error) => error.msg).join(", ")
+          : "Failed to record stock movement.";
+
+    throw new Error(message);
   }
+
+  backendActive = true;
+  return data;
 }
+
 
 export async function getDashboardStats(context = "all") {
   try {
