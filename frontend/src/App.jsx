@@ -1,36 +1,39 @@
-﻿import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import MainLayout from "./layouts/MainLayout";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { AuthProvider, useAuth } from "./features/auth";
+import AppShell from "./layouts/AppShell";
 import AppRoutes from "./routes/AppRoutes";
+import LoginPage from "./features/auth/LoginPage";
 import { useInventory } from "./hooks/useInventory";
-import { useDashboardStats } from "./hooks/useDashboardStats";
 import { useToast } from "./hooks/useToast";
 import { downloadCSVUrl } from "./api/client";
+import AddItemModal from "./components/inventory/AddItemModal";
+import AdjustStockModal from "./components/inventory/AdjustStockModal";
+import EditItemModal from "./components/inventory/EditItemModal";
+import DeleteItemModal from "./components/inventory/DeleteItemModal";
 
-export default function App() {
-  const navigate = useNavigate();
-  const [contextMode, setContextMode] = useState("ngo");
-  const [userRole, setUserRole] = useState("Manager");
+function AppContent() {
+  const location = useLocation();
+  const { user, organization, guestOrgType, isAuthenticated } = useAuth();
+  const contextMode = isAuthenticated ? organization?.type || "ngo" : guestOrgType || "ngo";
+  const userRole = isAuthenticated ? user?.role || "Admin" : "Guest";
 
   const { toast, showToast, closeToast } = useToast();
+
   const {
     inventory,
     addItem,
     editItem,
     removeItem,
     updateStock,
-    lowStockCount,
-    refreshInventory
+    refreshInventory,
   } = useInventory(contextMode);
-
-  const { stats, backendStatus, refreshStats } = useDashboardStats(contextMode);
 
   // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [adjustModalItem, setAdjustModalItem] = useState(null);
   const [editModalItem, setEditModalItem] = useState(null);
   const [deleteModalItem, setDeleteModalItem] = useState(null);
-  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
   const handleExportCSV = () => {
     const url = downloadCSVUrl(contextMode);
@@ -45,27 +48,27 @@ export default function App() {
 
   const handleAddItem = async (newItemData) => {
     const created = await addItem(newItemData);
-    await refreshStats();
+    await refreshInventory();
     showToast(`Created SKU '${created.sku}' successfully!`, "success");
     return created;
   };
 
   const handleEditItem = async (itemId, itemData) => {
     const updated = await editItem(itemId, itemData);
-    await refreshStats();
+    await refreshInventory();
     showToast(`Updated SKU '${updated.sku}' successfully!`, "success");
     return updated;
   };
 
   const handleDeleteItem = async (itemId) => {
     await removeItem(itemId);
-    await refreshStats();
+    await refreshInventory();
     showToast("Item deleted from catalog.", "success");
   };
 
   const handleAdjustStock = async (itemId, adjustPayload) => {
     const updated = await updateStock(itemId, adjustPayload);
-    await refreshStats();
+    await refreshInventory();
     const actionName =
       adjustPayload.adjustment_type === "RESTOCK"
         ? "Restocked (+"
@@ -76,45 +79,63 @@ export default function App() {
     return updated;
   };
 
+  // If on login route, render LoginPage without AppShell
+  if (location.pathname === "/login") {
+    return <LoginPage />;
+  }
+
   return (
-    <MainLayout
-      contextMode={contextMode}
-      setContextMode={setContextMode}
-      userRole={userRole}
-      setUserRole={setUserRole}
-      inventory={inventory}
-      lowStockCount={lowStockCount}
-      backendStatus={backendStatus}
-      toast={toast}
-      closeToast={closeToast}
-      isAddModalOpen={isAddModalOpen}
-      setIsAddModalOpen={setIsAddModalOpen}
-      adjustModalItem={adjustModalItem}
-      setAdjustModalItem={setAdjustModalItem}
-      editModalItem={editModalItem}
-      setEditModalItem={setEditModalItem}
-      deleteModalItem={deleteModalItem}
-      setDeleteModalItem={setDeleteModalItem}
-      isAboutModalOpen={isAboutModalOpen}
-      setIsAboutModalOpen={setIsAboutModalOpen}
-      onAddItem={handleAddItem}
-      onAdjustStock={handleAdjustStock}
-      onEditItem={handleEditItem}
-      onDeleteItem={handleDeleteItem}
-      onViewAlerts={() => navigate("/inventory")}
-    >
+    <AppShell toast={toast} closeToast={closeToast}>
       <AppRoutes
-        stats={stats}
         inventory={inventory}
         contextMode={contextMode}
         userRole={userRole}
-        setUserRole={setUserRole}
         onOpenAddModal={() => setIsAddModalOpen(true)}
         onOpenAdjustModal={(item) => setAdjustModalItem(item)}
         onOpenEditModal={(item) => setEditModalItem(item)}
         onOpenDeleteModal={(item) => setDeleteModalItem(item)}
         onExportCSV={handleExportCSV}
+        showToast={showToast}
       />
-    </MainLayout>
+
+      {/* Inventory Action Modals */}
+      <AddItemModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddItem}
+        contextMode={contextMode}
+      />
+
+      <AdjustStockModal
+        isOpen={Boolean(adjustModalItem)}
+        item={adjustModalItem}
+        onClose={() => setAdjustModalItem(null)}
+        onAdjust={(payload) => handleAdjustStock(adjustModalItem.id, payload)}
+        contextMode={contextMode}
+      />
+
+      <EditItemModal
+        isOpen={Boolean(editModalItem)}
+        item={editModalItem}
+        onClose={() => setEditModalItem(null)}
+        onSave={(data) => handleEditItem(editModalItem.id, data)}
+        contextMode={contextMode}
+      />
+
+      <DeleteItemModal
+        isOpen={Boolean(deleteModalItem)}
+        item={deleteModalItem}
+        onClose={() => setDeleteModalItem(null)}
+        onConfirm={handleDeleteItem}
+      />
+    </AppShell>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
