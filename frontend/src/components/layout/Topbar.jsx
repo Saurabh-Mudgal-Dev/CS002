@@ -1,5 +1,4 @@
-﻿import React from "react";
-import {
+﻿import {
   HeartHandshake,
   Store,
   ShieldCheck,
@@ -23,13 +22,13 @@ export default function Topbar({
 }) {
   const isNGO = contextMode === "ngo";
   const isConnected = backendStatus === "healthy";
-  const { theme, toggleTheme, isLight } = useTheme();
+  const { toggleTheme, isLight } = useTheme();
 
   return (
     <header
       className="sticky top-0 z-40 w-full border-b backdrop-blur-2xl px-4 sm:px-6 py-3 transition-colors shadow-xl"
       style={{
-        background: isLight ? "rgba(251, 248, 243, 0.95)" : "rgba(7, 5, 3, 0.95)",
+        background: isLight ? "rgba(240, 237, 245, 0.92)" : "rgba(18, 18, 23, 0.92)",
         borderColor: "var(--border-subtle)"
       }}
     >
@@ -45,7 +44,7 @@ export default function Topbar({
             >
               <div
                 className="h-full w-full rounded-[14px] flex items-center justify-center"
-                style={{ background: isLight ? "#ffffff" : "#0d0a08", color: "var(--accent)" }}
+                style={{ background: isLight ? "#ffffff" : "#121217", color: "var(--accent)" }}
               >
                 
               </div>
@@ -127,7 +126,7 @@ export default function Topbar({
             style={{
               background: "var(--bg-input)",
               borderColor: "var(--border-subtle)",
-              color: isLight ? "#d97706" : "#f5c842"
+              color: "var(--accent)"
             }}
             title={isLight ? "Switch to Dark  Mode" : "Switch to Warm  Light Mode"}
           >

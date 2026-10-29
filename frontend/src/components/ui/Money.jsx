@@ -1,5 +1,3 @@
-﻿import React from "react";
-
 export default function Money({ amount, currency = "INR" }) {
   const formatted = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -7,9 +5,8 @@ export default function Money({ amount, currency = "INR" }) {
   }).format(amount ?? 0);
 
   return (
-    <span className="tabular-nums font-medium text-[var(--text-primary)]">
+    <span className="tabular-nums font-semibold text-[var(--text-primary)]">
       {formatted}
     </span>
   );
 }
-

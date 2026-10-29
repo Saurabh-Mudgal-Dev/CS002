@@ -1,9 +1,8 @@
-import React from "react";
 import Badge from "../ui/Badge.jsx";
 
 export default function StatCard({ title, value, subtitle, icon: Icon, trend }) {
   return (
-    <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] p-5 shadow-sm">
+    <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] p-5 shadow-[0_1px_2px_0_rgba(0,0,0,0.03),0_6px_24px_-4px_rgba(25,22,46,0.05)]">
       <div className="flex items-start justify-between">
         <div className="space-y-1.5">
           <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
@@ -12,7 +11,7 @@ export default function StatCard({ title, value, subtitle, icon: Icon, trend }) 
           <div className="text-2xl font-semibold tabular-nums text-[var(--text-primary)]">{value}</div>
         </div>
         {Icon && (
-          <div className="p-2 rounded-md border border-[var(--border-mid)] bg-[var(--bg-input)]">
+          <div className="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
             <Icon className="w-5 h-5" />
           </div>
         )}

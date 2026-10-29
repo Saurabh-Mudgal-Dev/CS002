@@ -1,7 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import OverviewPage from "../pages/OverviewPage";
 import InventoryPage from "../pages/InventoryPage";
+import FinancePage from "../pages/FinancePage";
 import AuditLogPage from "../pages/AuditLogPage";
+import SettingsPage from "../pages/SettingsPage";
 import LoginPage from "../features/auth/LoginPage";
 import DesignPage from "../pages/DesignPage";
 
@@ -40,6 +42,10 @@ export default function AppRoutes({
         }
       />
       <Route
+        path="/finance"
+        element={<FinancePage showToast={showToast} />}
+      />
+      <Route
         path="/audit"
         element={
           <AuditLogPage
@@ -52,6 +58,10 @@ export default function AppRoutes({
       <Route
         path="/audit-log"
         element={<Navigate to="/audit" replace />}
+      />
+      <Route
+        path="/settings"
+        element={<SettingsPage showToast={showToast} />}
       />
       <Route path="/login" element={<LoginPage />} />
       {import.meta.env.DEV && (

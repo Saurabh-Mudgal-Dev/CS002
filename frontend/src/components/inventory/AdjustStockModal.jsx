@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, RefreshCw, HeartHandshake, Store } from "lucide-react";
 import Button from "../ui/Button";
@@ -61,33 +61,33 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200/90 dark:border-slate-800 overflow-hidden z-10"
+            className="relative w-full max-w-md bg-[var(--bg-surface-elev)] rounded-3xl p-6 sm:p-7 shadow-2xl border border-[var(--border-subtle)] overflow-hidden z-10"
           >
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
               <div>
-                <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">Adjust Stock Level</h3>
-                <p className="text-xs text-slate-500 truncate max-w-xs">{item.name}</p>
+                <h3 className="font-extrabold text-lg text-[var(--text-primary)]">Adjust Stock Level</h3>
+                <p className="text-xs text-[var(--text-muted)] truncate max-w-xs">{item.name}</p>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="text-[var(--text-dim)] hover:text-[var(--text-secondary)] dark:hover:text-[var(--text-primary)] p-1.5 rounded-xl hover:bg-[var(--row-hover)] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Current balance */}
-            <div className="mt-4 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+            <div className="mt-4 p-3.5 rounded-2xl bg-[var(--bg-surface)]/60 border border-[var(--border-subtle)]/60 flex items-center justify-between text-xs">
               <div>
-                <span className="text-slate-400">Current Balance:</span>
-                <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">
+                <span className="text-[var(--text-dim)]">Current Balance:</span>
+                <div className="text-base font-extrabold text-[var(--text-primary)] tabular-nums">
                   {item.quantity} units
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-slate-400">Safety Threshold:</span>
+                <span className="text-[var(--text-dim)]">Safety Threshold:</span>
                 <div className="text-sm font-bold text-amber-600 dark:text-amber-400 tabular-nums">
                   {item.reorder_level} units
                 </div>
@@ -104,7 +104,7 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
               {/* Adjustment Type Switcher */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2">
                   Action Type
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -114,7 +114,7 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
                     className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                       adjustmentType !== "RESTOCK"
                         ? "bg-rose-50 border-rose-300 text-rose-700 dark:bg-rose-950/40 dark:border-rose-800 dark:text-rose-300 shadow-xs"
-                        : "bg-slate-50 border-slate-200 text-slate-500 dark:bg-slate-800 dark:border-slate-700"
+                        : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-muted)] dark:bg-[var(--bg-surface-elev)] border-[var(--border-subtle)]"
                     }`}
                   >
                     {isNGO ? <HeartHandshake className="w-5 h-5 mb-1 text-rose-600 dark:text-rose-400" /> : <Store className="w-5 h-5 mb-1 text-rose-600 dark:text-rose-400" />}
@@ -127,7 +127,7 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
                     className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                       adjustmentType === "RESTOCK"
                         ? "bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 shadow-xs"
-                        : "bg-slate-50 border-slate-200 text-slate-500 dark:bg-slate-800 dark:border-slate-700"
+                        : "bg-[var(--bg-surface)] border-[var(--border-subtle)] text-[var(--text-muted)] dark:bg-[var(--bg-surface-elev)] border-[var(--border-subtle)]"
                     }`}
                   >
                     <RefreshCw className="w-5 h-5 mb-1 text-emerald-600 dark:text-emerald-400" />
@@ -138,7 +138,7 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
 
               {/* Quantity */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                   Quantity to {adjustmentType === "RESTOCK" ? "Add" : "Deduct"} <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -147,14 +147,14 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
                   max={adjustmentType !== "RESTOCK" ? item.quantity : 99999}
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all tabular-nums font-bold"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all tabular-nums font-bold"
                   required
                 />
               </div>
 
               {/* Reference Note */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                   Reference Note / Recipient
                 </label>
                 <input
@@ -168,12 +168,12 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
                       ? "e.g., Flood Relief Camp 4 or Community Health Clinic"
                       : "e.g., Customer Receipt #104 or Online Order"
                   }
-                  className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all"
                 />
               </div>
 
               {/* Action buttons */}
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[var(--border-subtle)]">
                 <Button
                   type="button"
                   variant="secondary"
@@ -198,3 +198,6 @@ export default function AdjustStockModal({ isOpen, item, onClose, onAdjust, cont
     </AnimatePresence>
   );
 }
+
+
+

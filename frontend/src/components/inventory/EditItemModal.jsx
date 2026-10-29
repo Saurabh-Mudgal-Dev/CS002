@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Save, Edit3 } from "lucide-react";
 import Button from "../ui/Button";
@@ -84,25 +84,25 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200/90 dark:border-slate-800 overflow-hidden z-10"
+            className="relative w-full max-w-lg bg-[var(--bg-surface-elev)] rounded-3xl p-6 sm:p-7 shadow-2xl border border-[var(--border-subtle)] overflow-hidden z-10"
           >
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/50">
+                <div className="p-2.5 rounded-2xl bg-[var(--badge-bg)] text-[var(--accent)] dark:bg-[var(--badge-bg)] dark:text-[var(--accent)] border border-[var(--badge-border)]/60 dark:border-blue-900/50">
                   <Edit3 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">Edit Inventory Item</h3>
-                  <p className="text-xs text-slate-500">
-                    Update properties for SKU: <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{item.sku}</span>
+                  <h3 className="font-extrabold text-lg text-[var(--text-primary)]">Edit Inventory Item</h3>
+                  <p className="text-xs text-[var(--text-muted)]">
+                    Update properties for SKU: <span className="font-mono font-bold text-[var(--accent)]">{item.sku}</span>
                   </p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1.5 rounded-xl text-[var(--text-dim)] hover:text-[var(--text-secondary)] dark:hover:text-[var(--text-primary)] hover:bg-[var(--row-hover)] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -117,7 +117,7 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
             {/* Form */}
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                   Item Name <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -125,13 +125,13 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                     SKU Identifier <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -139,18 +139,18 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
                     value={formData.sku}
                     onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                     required
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono uppercase text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm font-mono uppercase text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                     Category
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all cursor-pointer"
                   >
                     {categories.map((c) => (
                       <option key={c} value={c}>
@@ -163,7 +163,7 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                     Quantity
                   </label>
                   <input
@@ -171,12 +171,12 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
                     min="0"
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white tabular-nums font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] tabular-nums font-mono focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                     Safety Threshold
                   </label>
                   <input
@@ -184,13 +184,13 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
                     min="1"
                     value={formData.reorder_level}
                     onChange={(e) => setFormData({ ...formData, reorder_level: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white tabular-nums font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] tabular-nums font-mono focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Unit Cost (₹)
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
+                    Unit Cost (â‚¹)
                   </label>
                   <input
                     type="number"
@@ -198,12 +198,12 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
                     min="0"
                     value={formData.unit_price}
                     onChange={(e) => setFormData({ ...formData, unit_price: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white tabular-nums font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] tabular-nums font-mono focus:outline-none focus:ring-2 focus:ring-[var(--border-hot)]/20 focus:border-[var(--border-hot)] transition-all"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[var(--border-subtle)]">
                 <Button
                   type="button"
                   variant="secondary"
@@ -229,3 +229,6 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
     </AnimatePresence>
   );
 }
+
+
+

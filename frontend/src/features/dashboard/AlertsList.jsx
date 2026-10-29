@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   Clock,
@@ -12,11 +12,11 @@ export default function AlertsList({ alerts = [] }) {
   const hasAlerts = alerts && alerts.length > 0;
 
   return (
-    <Card className="p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 space-y-4">
+    <Card className="p-5 sm:p-6 border border-[var(--border-subtle)] space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+          <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
             Operational Alerts
           </h2>
         </div>
@@ -28,14 +28,14 @@ export default function AlertsList({ alerts = [] }) {
       </div>
 
       {!hasAlerts ? (
-        <div className="py-8 px-4 flex flex-col items-center justify-center text-center space-y-2 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+        <div className="py-8 px-4 flex flex-col items-center justify-center text-center space-y-2 border border-dashed border-[var(--border-subtle)] rounded-2xl">
           <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 flex items-center justify-center">
             <CheckCircle2 className="w-5 h-5" />
           </div>
-          <p className="text-xs font-semibold text-slate-900 dark:text-white">
+          <p className="text-xs font-semibold text-[var(--text-primary)]">
             All stock levels are optimal
           </p>
-          <p className="text-[11px] text-slate-500 max-w-xs">
+          <p className="text-[11px] text-[var(--text-muted)] max-w-xs">
             Zero low-stock deficits or upcoming expiration warnings for this organization.
           </p>
         </div>
@@ -72,14 +72,14 @@ export default function AlertsList({ alerts = [] }) {
                   </div>
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-slate-900 dark:text-white truncate max-w-[180px]">
+                      <span className="font-semibold text-[var(--text-primary)] truncate max-w-[180px]">
                         {alert.name}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400 uppercase">
+                      <span className="text-[10px] font-mono text-[var(--text-dim)] uppercase">
                         {alert.sku}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 leading-tight">
+                    <p className="text-[11px] text-[var(--text-muted)] leading-tight">
                       {alert.message}
                     </p>
                   </div>
@@ -91,7 +91,7 @@ export default function AlertsList({ alerts = [] }) {
                   </Badge>
                   <Link
                     to={`/inventory?search=${encodeURIComponent(alert.sku)}`}
-                    className="text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5"
+                    className="text-[11px] font-medium text-[var(--accent)] hover:underline flex items-center gap-0.5"
                   >
                     <span>View</span>
                     <ArrowRight className="w-3 h-3" />
@@ -105,3 +105,4 @@ export default function AlertsList({ alerts = [] }) {
     </Card>
   );
 }
+
