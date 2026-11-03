@@ -1,5 +1,5 @@
 const base =
-  "inline-flex items-center rounded-full border font-medium transition-colors";
+  "inline-flex items-center rounded-full border font-semibold tracking-tight transition-colors";
 
 const sizes = {
   sm: "px-2 py-0.5 text-[10px] tracking-wide",
@@ -7,15 +7,16 @@ const sizes = {
   lg: "px-3 py-1.5 text-xs font-semibold",
 };
 
+/* Token-driven variants — designed to read well on dark violet and clean on light */
 const variants = {
-  default: "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] dark:border-[var(--border-subtle)] dark:bg-[var(--bg-surface)] dark:text-[var(--text-secondary)]",
-  primary: "border-[var(--badge-border)] bg-[var(--badge-bg)] text-[var(--accent)] dark:border-[var(--badge-border)] dark:bg-[var(--badge-bg)] dark:text-[var(--badge-text)]",
-  accent: "border-[var(--badge-border)] bg-[var(--badge-bg)] text-[var(--accent)] dark:border-[var(--badge-border)] dark:bg-[var(--badge-bg)] dark:text-[var(--badge-text)]",
-  info: "border-sky-200/60 bg-sky-50/70 text-sky-700 dark:border-sky-900/40 dark:bg-sky-950/30 dark:text-sky-400",
-  success: "border-emerald-200/60 bg-emerald-50/70 text-emerald-700 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-400",
-  warning: "border-amber-200/60 bg-amber-50/70 text-amber-700 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-400",
-  danger: "border-rose-200/60 bg-rose-50/70 text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/30 dark:text-rose-400",
-  neutral: "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] dark:border-[var(--border-subtle)] dark:bg-[var(--bg-surface)] dark:text-[var(--text-muted)]",
+  default: "border-[var(--border-mid)] bg-[var(--row-hover)] text-[var(--text-secondary)]",
+  primary: "border-[var(--badge-border)] bg-[var(--badge-bg)] text-[var(--badge-text)]",
+  accent: "border-[var(--badge-border)] bg-[var(--badge-bg)] text-[var(--badge-text)]",
+  info: "border-sky-500/25 bg-sky-500/10 text-sky-600 dark:text-sky-300",
+  success: "border-emerald-500/25 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300",
+  warning: "border-amber-500/25 bg-amber-500/10 text-amber-600 dark:text-amber-300",
+  danger: "border-rose-500/25 bg-rose-500/10 text-rose-600 dark:text-rose-300",
+  neutral: "border-[var(--border-mid)] bg-[var(--row-hover)] text-[var(--text-muted)]",
 };
 
 export default function Badge({
