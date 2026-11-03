@@ -1,4 +1,4 @@
-﻿import {
+import {
   HeartHandshake,
   Store,
   ShieldCheck,
@@ -81,7 +81,7 @@ export default function Topbar({
           </div>
         </div>
 
-        {/* Context Switcher â€” NGO vs Retail */}
+        {/* Context Switcher ' NGO vs Retail */}
         <div
           className="flex items-center p-1 rounded-2xl border shadow-inner"
           style={{ background: "var(--bg-input)", borderColor: "var(--border-subtle)" }}

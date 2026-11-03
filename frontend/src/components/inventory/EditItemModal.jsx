@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Save, Edit3 } from "lucide-react";
 import Button from "../ui/Button";
@@ -190,7 +190,7 @@ export default function EditItemModal({ isOpen, item, onClose, onSave, contextMo
 
                 <div>
                   <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
-                    Unit Cost (â‚¹)
+                    Unit Cost (₹)
                   </label>
                   <input
                     type="number"
