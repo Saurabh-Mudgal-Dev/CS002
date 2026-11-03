@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Topbar from "../components/layout/Topbar";
 import Toast from "../components/ui/Toast";
@@ -136,9 +136,9 @@ export default function MainLayout({
         }}
       >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 font-semibold">
-          <span>ResourceOne Â· Smart Inventory & Resource Operations Platform</span>
+          <span>ResourceOne · Smart Inventory & Resource Operations Platform</span>
           <span style={{ color: "var(--text-dim)" }}>
-            Enterprise Edition Â· Dual Operational NGO & Retail Architecture
+            Enterprise Edition · Dual Operational NGO & Retail Architecture
           </span>
         </div>
       </footer>

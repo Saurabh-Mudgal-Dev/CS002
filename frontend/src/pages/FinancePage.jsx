@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
@@ -301,7 +301,7 @@ export default function FinancePage({ showToast = () => {} }) {
             </div>
           </div>
           <div className="text-2xl font-extrabold text-[var(--text-primary)] tabular-nums">
-            {loading ? "â€”" : formatCurrency(summary?.cash_income || 0, currency)}
+            {loading ? "—" : formatCurrency(summary?.cash_income || 0, currency)}
           </div>
           <p className="text-[11px] text-[var(--text-dim)]">
             {donations.length} recorded donation grants
@@ -317,7 +317,7 @@ export default function FinancePage({ showToast = () => {} }) {
             </div>
           </div>
           <div className="text-2xl font-extrabold text-[var(--text-primary)] tabular-nums">
-            {loading ? "â€”" : formatCurrency(summary?.expenses || 0, currency)}
+            {loading ? "—" : formatCurrency(summary?.expenses || 0, currency)}
           </div>
           <p className="text-[11px] text-[var(--text-dim)]">
             {expenses.length} disbursed vouchers
@@ -335,7 +335,7 @@ export default function FinancePage({ showToast = () => {} }) {
           <div className={`text-2xl font-extrabold tabular-nums ${
             (summary?.net_position || 0) >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
           }`}>
-            {loading ? "â€”" : formatCurrency(summary?.net_position || 0, currency)}
+            {loading ? "—" : formatCurrency(summary?.net_position || 0, currency)}
           </div>
           <p className="text-[11px] text-[var(--text-dim)]">
             Inflow minus operational disbursements
@@ -351,7 +351,7 @@ export default function FinancePage({ showToast = () => {} }) {
             </div>
           </div>
           <div className="text-2xl font-extrabold text-[var(--text-primary)] tabular-nums">
-            {loading ? "â€”" : formatCurrency(summary?.inventory_value || 0, currency)}
+            {loading ? "—" : formatCurrency(summary?.inventory_value || 0, currency)}
           </div>
           <p className="text-[11px] text-[var(--text-dim)]">
             Physical stock capitalized on balance sheet
@@ -366,7 +366,7 @@ export default function FinancePage({ showToast = () => {} }) {
           onClick={() => setActiveTab("donations")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "donations"
-              ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] shadow-xs"
+              ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
               : "text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:bg-[var(--row-hover)]"
           }`}
         >
@@ -379,7 +379,7 @@ export default function FinancePage({ showToast = () => {} }) {
           onClick={() => setActiveTab("purchases")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "purchases"
-              ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] shadow-xs"
+              ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
               : "text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:bg-[var(--row-hover)]"
           }`}
         >
@@ -392,7 +392,7 @@ export default function FinancePage({ showToast = () => {} }) {
           onClick={() => setActiveTab("expenses")}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === "expenses"
-              ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] shadow-xs"
+              ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
               : "text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:bg-[var(--row-hover)]"
           }`}
         >

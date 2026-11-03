@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   Clock,
@@ -12,11 +12,13 @@ export default function AlertsList({ alerts = [] }) {
   const hasAlerts = alerts && alerts.length > 0;
 
   return (
-    <Card className="p-5 sm:p-6 border border-[var(--border-subtle)] space-y-4">
+    <Card className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-          <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-amber-500/12 text-amber-600 dark:text-amber-400 shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)] tracking-tight">
             Operational Alerts
           </h2>
         </div>
@@ -28,11 +30,11 @@ export default function AlertsList({ alerts = [] }) {
       </div>
 
       {!hasAlerts ? (
-        <div className="py-8 px-4 flex flex-col items-center justify-center text-center space-y-2 border border-dashed border-[var(--border-subtle)] rounded-2xl">
-          <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 flex items-center justify-center">
-            <CheckCircle2 className="w-5 h-5" />
+        <div className="py-8 px-4 flex flex-col items-center justify-center text-center space-y-2.5">
+          <div className="w-12 h-12 rounded-full bg-emerald-500/12 text-emerald-500 flex items-center justify-center ring-4 ring-emerald-500/10">
+            <CheckCircle2 className="w-6 h-6" />
           </div>
-          <p className="text-xs font-semibold text-[var(--text-primary)]">
+          <p className="text-sm font-bold text-[var(--text-primary)]">
             All stock levels are optimal
           </p>
           <p className="text-[11px] text-[var(--text-muted)] max-w-xs">

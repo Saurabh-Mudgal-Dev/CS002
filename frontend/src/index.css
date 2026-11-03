@@ -1,70 +1,121 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+/* dark:* utilities follow the app's data-theme attribute, not the OS */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ============================================================
+   ResourceOne — "Aurora" Design System
+   Dark: deep violet operations console (default)
+   Light: clean professional workplace theme
+   ============================================================ */
+
 :root {
-  /* Alukaze Luminous Light Mode — Premium, Refined & Sophisticated */
-  --bg-primary:       #f5f3f8;   /* Warm off-white with violet tint */
-  --bg-surface:       #f0edf5;
-  --bg-surface-elev:  #ffffff;
-  --bg-card:          rgba(255, 255, 255, 0.92);
-  --bg-input:         #ffffff;
-
-  --border-subtle:    rgba(25, 22, 46, 0.07);
-  --border-mid:       #ddd8e5;
-  --border-hot:       #6366f1;
-
-  --text-primary:     #1e1b2a;   /* Deep warm near-black */
-  --text-secondary:   #4a4558;
-  --text-muted:       #8a8598;
-  --text-dim:         #b8b4c2;
-
-  --accent:           #5b21b6;   /* Deep premium violet */
-  --accent-hover:     #4338ca;
-  --accent-gradient:  linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-
-  --badge-bg:         rgba(91, 33, 182, 0.08);
-  --badge-border:     rgba(91, 33, 182, 0.18);
-  --badge-text:       #4338ca;
-
-  --row-hover:        rgba(91, 33, 182, 0.04);
-  --table-header-bg:  #f0edf5;
-
-  color-scheme: light;
-}
-
-[data-theme="dark"] {
-  /* Alukaze Luminous Dark Mode — Deep, Polished & Premium */
-  --bg-primary:       #0a0a0f;   /* Deep near-black */
-  --bg-surface:       #121217;
-  --bg-surface-elev:  #1a1a22;
-  --bg-card:          rgba(26, 26, 34, 0.85);
-  --bg-input:         #121217;
+  /* Aurora Dark — default. Premium violet operations console. */
+  --bg-primary:       #0b0910;
+  --bg-surface:       #100d18;
+  --bg-surface-elev:  #16121f;
+  --bg-card:          linear-gradient(180deg, rgba(30,25,45,0.65) 0%, rgba(22,18,32,0.85) 100%);
+  --bg-card-base:     #16121f;
+  --bg-input:         #0f0c16;
 
   --border-subtle:    rgba(255, 255, 255, 0.07);
-  --border-mid:       rgba(255, 255, 255, 0.10);
-  --border-hot:       rgba(139, 92, 246, 0.35);
+  --border-mid:       rgba(255, 255, 255, 0.12);
+  --border-hot:       rgba(139, 92, 246, 0.45);
 
-  --text-primary:     #f5f3f8;
-  --text-secondary:   #d8d3de;
-  --text-muted:       #a5a1b0;
-  --text-dim:         #7a7586;
+  --text-primary:     #f3f0fa;
+  --text-secondary:   #c6c1d6;
+  --text-muted:       #9b94b0;
+  --text-dim:         #6f6884;
 
-  --accent:           #a855f7;   /* Vivid premium violet */
-  --accent-hover:     #c084fc;
-  --accent-gradient:  linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  --accent:           #a78bfa;   /* violet for text/icons */
+  --accent-hover:     #c4b5fd;
+  --accent-solid:     #7c3aed;   /* solid fill for buttons/pills */
+  --accent-solid-hover: #8b5cf6;
+  --accent-gradient:  linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --accent-soft:      rgba(139, 92, 246, 0.14);
 
-  --badge-bg:         rgba(168, 85, 247, 0.12);
-  --badge-border:     rgba(168, 85, 247, 0.24);
-  --badge-text:       #c084fc;
+  --badge-bg:         rgba(139, 92, 246, 0.14);
+  --badge-border:     rgba(167, 139, 250, 0.30);
+  --badge-text:       #c4b5fd;
 
-  --row-hover:        rgba(168, 85, 247, 0.05);
-  --table-header-bg:  rgba(255, 255, 255, 0.03);
+  --row-hover:        rgba(139, 92, 246, 0.07);
+  --table-header-bg:  rgba(255, 255, 255, 0.035);
+
+  --success:          #34d399;
+  --warning:          #fbbf24;
+  --danger:           #fb7185;
+  --info:             #60a5fa;
+
+  --intake:           #60a5fa;   /* chart series */
+  --outflow:          #a78bfa;
+
+  --glow-a:           rgba(124, 58, 237, 0.14);
+  --glow-b:           rgba(59, 130, 246, 0.08);
+  --glow-c:           rgba(217, 70, 239, 0.07);
+
+  --shadow-card:      0 1px 2px rgba(0,0,0,0.30), 0 12px 32px -12px rgba(0,0,0,0.55);
+  --shadow-pop:       0 16px 48px -12px rgba(0,0,0,0.65), 0 4px 16px -4px rgba(0,0,0,0.5);
 
   color-scheme: dark;
 }
 
+[data-theme="light"] {
+  /* Aurora Light — calm, professional, boardroom-grade. */
+  --bg-primary:       #f6f5fa;
+  --bg-surface:       #efedf5;
+  --bg-surface-elev:  #ffffff;
+  --bg-card:          linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(252,251,255,0.98) 100%);
+  --bg-card-base:     #ffffff;
+  --bg-input:         #ffffff;
+
+  --border-subtle:    rgba(28, 24, 48, 0.08);
+  --border-mid:       rgba(28, 24, 48, 0.14);
+  --border-hot:       rgba(124, 58, 237, 0.45);
+
+  --text-primary:     #1c1830;
+  --text-secondary:   #453f5e;
+  --text-muted:       #6f6987;
+  --text-dim:         #938db0;
+
+  --accent:           #6d28d9;
+  --accent-hover:     #5b21b6;
+  --accent-solid:     #6d28d9;
+  --accent-solid-hover: #5b21b6;
+  --accent-gradient:  linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  --accent-soft:      rgba(124, 58, 237, 0.08);
+
+  --badge-bg:         rgba(124, 58, 237, 0.07);
+  --badge-border:     rgba(124, 58, 237, 0.20);
+  --badge-text:       #6d28d9;
+
+  --row-hover:        rgba(124, 58, 237, 0.045);
+  --table-header-bg:  rgba(124, 58, 237, 0.04);
+
+  --success:          #059669;
+  --warning:          #d97706;
+  --danger:           #e11d48;
+  --info:             #2563eb;
+
+  --intake:           #2563eb;
+  --outflow:          #7c3aed;
+
+  --glow-a:           rgba(124, 58, 237, 0.05);
+  --glow-b:           rgba(59, 130, 246, 0.04);
+  --glow-c:           rgba(236, 72, 153, 0.03);
+
+  --shadow-card:      0 1px 2px rgba(28,24,48,0.04), 0 10px 30px -12px rgba(28,24,48,0.10);
+  --shadow-pop:       0 20px 50px -12px rgba(28,24,48,0.22), 0 6px 18px -6px rgba(28,24,48,0.14);
+
+  color-scheme: light;
+}
+
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -72,18 +123,73 @@ body {
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--text-secondary);
-  font-family: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
   font-weight: 400;
+  letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* Alukaze Dot Grid & Ambient Mesh Backgrounds */
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: var(--text-primary);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.22);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.38);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* ---------- Ambient page scenery ---------- */
+.app-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(900px 480px at 12% -8%, var(--glow-a), transparent 62%),
+    radial-gradient(760px 420px at 88% 4%, var(--glow-b), transparent 60%),
+    radial-gradient(700px 520px at 65% 108%, var(--glow-c), transparent 62%);
+}
+
+.app-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 90% 70% at 20% 0%, black 30%, transparent 75%);
+  opacity: 0.55;
+}
+
+[data-theme="light"] .app-bg::after {
+  background-image: radial-gradient(rgba(124, 58, 237, 0.07) 1px, transparent 1px);
+  opacity: 0.4;
+}
+
 .bg-alukaze-grid {
-  background-image: radial-gradient(rgba(91, 33, 182, 0.10) 1.25px, transparent 1.25px);
+  background-image: radial-gradient(rgba(124, 58, 237, 0.10) 1.25px, transparent 1.25px);
   background-size: 24px 24px;
 }
 
@@ -93,44 +199,62 @@ body {
 }
 
 .bg-radial-ambient {
-  background: radial-gradient(circle at 50% 0%, rgba(91, 33, 182, 0.06) 0%, rgba(245, 243, 248, 0) 65%);
+  background: radial-gradient(circle at 50% 0%, var(--glow-a) 0%, transparent 65%);
 }
 
-[data-theme="dark"] .bg-radial-ambient {
-  background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.10) 0%, rgba(10, 10, 15, 0) 65%);
+/* ---------- Gradient & accent utilities ---------- */
+.bg-accent-gradient {
+  background-image: var(--accent-gradient);
 }
 
-/* Premium soft glass cards */
+/* ---------- Card surfaces ---------- */
 .alukaze-card {
-  background: var(--bg-surface-elev);
+  background: var(--bg-card-base);
   border: 1px solid var(--border-subtle);
   border-radius: 1rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 6px 24px -4px rgba(25, 22, 46, 0.05);
+  box-shadow: var(--shadow-card);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[data-theme="dark"] .alukaze-card {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25), 0 6px 24px -4px rgba(0, 0, 0, 0.35);
 }
 
 .alukaze-card-hover:hover {
   border-color: var(--border-hot);
-  box-shadow: 0 10px 30px -6px rgba(91, 33, 182, 0.10), 0 4px 12px -2px rgba(25, 22, 46, 0.04);
+  box-shadow: 0 12px 36px -10px rgba(124, 58, 237, 0.25), var(--shadow-card);
   transform: translateY(-2px);
 }
 
-[data-theme="dark"] .alukaze-card-hover:hover {
-  border-color: rgba(168, 85, 247, 0.35);
-  box-shadow: 0 10px 30px -6px rgba(168, 85, 247, 0.14), 0 4px 12px -2px rgba(0, 0, 0, 0.25);
-  transform: translateY(-2px);
+/* Gradient hairline at the top edge of primary surfaces */
+.card-topline {
+  position: relative;
+  overflow: hidden;
+}
+.card-topline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.45), transparent);
+  pointer-events: none;
+}
+[data-theme="light"] .card-topline::before {
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.28), transparent);
 }
 
-/* Subtle premium ring for focused inputs */
 .ring-premium {
-  box-shadow: 0 0 0 2px rgba(91, 33, 182, 0.18);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
-[data-theme="dark"] .ring-premium {
-  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.22);
+
+.font-display {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.table-header-row th {
+  background-color: var(--table-header-bg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -140,6 +264,11 @@ body {
   }
 }
 
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+/* Recharts polish */
+.recharts-cartesian-axis-tick text {
+  font-size: 11px;
+  fill: var(--text-dim);
+}
+.recharts-default-tooltip {
+  border-radius: 12px !important;
 }

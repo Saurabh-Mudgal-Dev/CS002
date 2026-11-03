@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
@@ -204,7 +204,7 @@ export default function SettingsPage({ showToast = () => {} }) {
               <div className="flex justify-between py-1 border-b border-[var(--border-subtle)]">
                 <span className="text-[var(--text-dim)]">Currency Standard:</span>
                 <span className="font-mono font-bold text-[var(--text-primary)]">
-                  {organization?.currency || "INR"} (â‚¹)
+                  {organization?.currency || "INR"} (₹)
                 </span>
               </div>
               <div className="flex justify-between py-1 border-b border-[var(--border-subtle)]">

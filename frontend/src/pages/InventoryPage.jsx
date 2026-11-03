@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
@@ -192,7 +192,7 @@ export default function InventoryPage({
               onClick={() => setSelectedStatus(st)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap border ${
                 selectedStatus === st
-                  ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] border-[var(--border-subtle)] dark:border-[var(--border-hot)] shadow-xs"
+                  ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
                   : "bg-[var(--bg-surface-elev)] border-[var(--border-subtle)] text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:bg-[var(--row-hover)]"
               }`}
             >

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./useAuth";
@@ -118,7 +118,7 @@ export default function LoginPage() {
           className="text-center space-y-2.5"
         >
           <Link to="/overview" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 text-white flex items-center justify-center font-black text-xl shadow-md ring-1 ring-white/20">
+            <div className="w-12 h-12 rounded-2xl bg-accent-gradient text-white flex items-center justify-center font-black text-xl shadow-[0_10px_30px_-8px_rgba(124,58,237,0.7)] ring-1 ring-white/20">
               R1
             </div>
           </Link>
@@ -195,7 +195,7 @@ export default function LoginPage() {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                      placeholder="••••••••••••"
                       className="pl-10 pr-10 text-sm"
                       required
                     />
@@ -259,7 +259,7 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.99 }}
                 transition={{ duration: 0.15 }}
                 onClick={() => handleFillDemo(acc)}
-                className="w-full text-left p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elev)] hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-xs transition-colors flex items-center justify-between text-xs group cursor-pointer"
+                className="w-full text-left p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card-base)] hover:border-[var(--border-hot)] hover:shadow-[0_8px_24px_-10px_rgba(124,58,237,0.4)] transition-all flex items-center justify-between text-xs group cursor-pointer"
               >
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
@@ -282,7 +282,7 @@ export default function LoginPage() {
 
         {/* Footer info */}
         <p className="text-center text-xs text-[var(--text-dim)]">
-          K.R. Mangalam University Â· Second Year Minor Project
+          K.R. Mangalam University · Second Year Minor Project
         </p>
       </div>
     </div>
