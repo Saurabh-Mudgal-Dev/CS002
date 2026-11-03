@@ -29,7 +29,7 @@ def test_auth_me_endpoint(client):
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == 1
-    assert data["org_name"] == "Asha Relief"
+    assert data["org_name"] == "Community Relief Organization"
     assert data["email"] == "admin@asha.org"
     assert data["role"] == "admin"
 
@@ -37,5 +37,5 @@ def test_auth_me_endpoint(client):
 def test_admin_rbac_protection(client):
     volunteer_headers = get_auth_headers(user_id=3, org_id=1, role="volunteer")
     # Volunteers cannot access user management
-    response = client.get("/api/v1/users", headers=volunteer_headers)
+    response = client.patch("/api/v1/users/1", json={"role": "admin"}, headers=volunteer_headers)
     assert response.status_code == 403

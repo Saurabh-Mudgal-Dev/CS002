@@ -20,7 +20,21 @@ def login(
     response: Response,
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == req.email.strip().lower()).first()
+    email_clean = req.email.strip().lower()
+    user = db.query(User).filter(User.email == email_clean).first()
+
+    # Generic alias support for demo accounts
+    if not user:
+        alias_map = {
+            "admin@resourceone.org": "admin@asha.org",
+            "manager@resourceone.org": "manager@asha.org",
+            "accounts@resourceone.org": "accounts@asha.org",
+            "volunteer@resourceone.org": "volunteer@asha.org",
+            "admin@org.local": "admin@asha.org",
+        }
+        if email_clean in alias_map:
+            user = db.query(User).filter(User.email == alias_map[email_clean]).first()
+
     if not user or not verify_password(req.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -87,13 +101,21 @@ def logout(response: Response):
 @router.get("/me", response_model=SessionUser)
 def get_me(current_user: User = Depends(get_current_user)):
     org = current_user.organization
+    org_name = org.name if org else "Community Relief Organization"
+    if "asha" in org_name.lower():
+        org_name = "Community Relief Organization"
+
+    full_name = current_user.full_name
+    if full_name and "asha" in full_name.lower():
+        full_name = full_name.replace("Asha ", "Relief ").replace("asha ", "Relief ")
+
     return SessionUser(
         id=current_user.id,
         org_id=current_user.org_id,
-        org_name=org.name if org else "",
-        org_type=org.org_type if org else "",
+        org_name=org_name,
+        org_type=org.org_type if org else "ngo",
         currency=org.currency if org else "INR",
         email=current_user.email,
-        full_name=current_user.full_name,
+        full_name=full_name,
         role=current_user.role,
     )

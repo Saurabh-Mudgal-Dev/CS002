@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
@@ -7,8 +7,9 @@ from app.database import get_db
 from app.models.finance import Donation
 from app.models.inventory import InventoryItem
 from app.models.user import User
+from app.models.organization import Organization
 from app.schemas.finance import DonationCreate, DonationOut
-from app.core.deps import get_current_user
+from app.core.deps import get_current_user, get_optional_user
 from app.services.finance import create_donation_record
 
 router = APIRouter(prefix="/donations", tags=["Donations"])
@@ -18,16 +19,25 @@ router = APIRouter(prefix="/donations", tags=["Donations"])
 def list_donations(
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    current_user: User = Depends(get_current_user),
+    org_type: Optional[str] = Query("ngo"),
+    current_user: Optional[User] = Depends(get_optional_user),
     db: Session = Depends(get_db)
 ):
     """
     List donations.
-    Volunteers only see their own recorded donations.
-    Admin, Manager, Accountant see all donations for their organization.
+    Available to unauthenticated visitors in public preview mode;
+    Authenticated users view donations scoped to their active organization.
     """
-    query = db.query(Donation).filter(Donation.org_id == current_user.org_id)
-    if current_user.role.lower() == "volunteer":
+    if current_user:
+        target_org_id = current_user.org_id
+        is_volunteer = current_user.role.lower() == "volunteer"
+    else:
+        org = db.query(Organization).filter(Organization.org_type == org_type).first()
+        target_org_id = org.id if org else 1
+        is_volunteer = False
+
+    query = db.query(Donation).filter(Donation.org_id == target_org_id)
+    if is_volunteer and current_user:
         query = query.filter(Donation.recorded_by == current_user.id)
 
     donations = query.order_by(desc(Donation.donation_date), desc(Donation.id)).offset(offset).limit(limit).all()

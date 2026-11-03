@@ -29,13 +29,13 @@ def seed_database(db: Session = None):
 
         # 1. Organizations
         org_asha = Organization(
-            name="Asha Relief Foundation",
+            name="Community Relief Organization",
             org_type="ngo",
             currency="INR",
             created_at=now - timedelta(days=90),
         )
         org_sunrise = Organization(
-            name="Sunrise Kirana Store",
+            name="Sunrise Retail Store",
             org_type="retail",
             currency="INR",
             created_at=now - timedelta(days=90),
@@ -47,7 +47,7 @@ def seed_database(db: Session = None):
         users = [
             User(
                 org_id=org_asha.id,
-                full_name="Asha Administrator",
+                full_name="Relief Administrator",
                 email="admin@asha.org",
                 password_hash=demo_password_hash,
                 role="admin",
@@ -56,7 +56,7 @@ def seed_database(db: Session = None):
             ),
             User(
                 org_id=org_asha.id,
-                full_name="Asha Inventory Manager",
+                full_name="Relief Inventory Manager",
                 email="manager@asha.org",
                 password_hash=demo_password_hash,
                 role="manager",
@@ -65,7 +65,7 @@ def seed_database(db: Session = None):
             ),
             User(
                 org_id=org_asha.id,
-                full_name="Asha Accountant",
+                full_name="Relief Accountant",
                 email="accounts@asha.org",
                 password_hash=demo_password_hash,
                 role="accountant",
@@ -74,7 +74,7 @@ def seed_database(db: Session = None):
             ),
             User(
                 org_id=org_asha.id,
-                full_name="Asha Field Volunteer",
+                full_name="Field Operations Volunteer",
                 email="volunteer@asha.org",
                 password_hash=demo_password_hash,
                 role="volunteer",

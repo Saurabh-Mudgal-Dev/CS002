@@ -7,6 +7,7 @@ from app.api.v1.routers.donations import router as donations_router
 from app.api.v1.routers.expenses import router as expenses_router
 from app.api.v1.routers.finance import router as finance_router
 from app.api.v1.routers.reports import router as reports_router
+from app.api.v1.routers.dashboard import router as dashboard_router
 
 api_v1_router = APIRouter(prefix="/api/v1")
 
@@ -18,3 +19,4 @@ api_v1_router.include_router(donations_router)
 api_v1_router.include_router(expenses_router)
 api_v1_router.include_router(finance_router)
 api_v1_router.include_router(reports_router)
+api_v1_router.include_router(dashboard_router)
