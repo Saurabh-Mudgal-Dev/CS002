@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../features/auth/useAuth";
@@ -122,7 +122,7 @@ export default function OverviewPage({ showToast = () => {} }) {
   if (viewMode === "showcase") {
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between p-3 rounded-2xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] shadow-xs">
+        <div className="flex items-center justify-between p-3 rounded-2xl bg-[var(--bg-card-base)] border border-[var(--border-subtle)] shadow-[var(--shadow-card)]">
           <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-secondary)]">
             <Sparkles className="w-4 h-4 text-[var(--accent)]" />
             <span>Interactive Product Tour Mode</span>
@@ -130,7 +130,7 @@ export default function OverviewPage({ showToast = () => {} }) {
           <button
             type="button"
             onClick={() => setViewMode("dashboard")}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] text-xs font-bold hover:shadow-xs transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent-gradient text-white text-xs font-bold shadow-[0_6px_18px_-6px_rgba(124,58,237,0.6)] hover:brightness-110 transition-all cursor-pointer"
           >
             <LayoutDashboard className="w-3.5 h-3.5" />
             <span>Switch to Live Operations</span>
@@ -157,7 +157,7 @@ export default function OverviewPage({ showToast = () => {} }) {
 
   const formattedUpdateTime = lastUpdated
     ? new Intl.DateTimeFormat("en-IN", { hour: "2-digit", minute: "2-digit" }).format(lastUpdated)
-    : "â€”";
+    : "—";
 
   return (
     <motion.div
@@ -189,18 +189,18 @@ export default function OverviewPage({ showToast = () => {} }) {
         {/* Actions Bar & Mode Switcher */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* View Toggle */}
-          <div className="flex items-center p-1 bg-[var(--bg-surface)] dark:bg-[var(--bg-surface-elev)] rounded-xl border border-[var(--border-subtle)] text-xs font-semibold">
+          <div className="flex items-center p-1 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-subtle)] text-xs font-semibold">
             <button
               type="button"
               onClick={() => setViewMode("dashboard")}
-              className="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] shadow-2xs font-bold"
+              className="px-3 py-1.5 rounded-lg bg-accent-gradient text-white shadow-sm font-bold cursor-pointer"
             >
               Live Operations
             </button>
             <button
               type="button"
               onClick={() => setViewMode("showcase")}
-              className="px-2.5 py-1 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] dark:hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             >
               Showcase Tour
             </button>
@@ -248,23 +248,23 @@ export default function OverviewPage({ showToast = () => {} }) {
       {!isAuthenticated ? (
         <motion.div
           variants={itemVariants}
-          className="p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/50 dark:from-[var(--bg-surface-elev)] dark:to-[var(--bg-surface-elev)]/60 border border-[var(--badge-border)]/80 border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs"
+          className="p-4 rounded-2xl bg-[var(--bg-card-base)] border border-[var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-[var(--shadow-card)] relative overflow-hidden card-topline"
         >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-blue-600 text-white shadow-xs shrink-0">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-[var(--accent-soft)] text-[var(--accent)] shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <p className="font-bold text-[var(--text-primary)]">
-                Public Guest Mode Â· Operations Center Active
+              <p className="font-extrabold text-[var(--text-primary)] tracking-tight">
+                Public Guest Mode · Operations Center Active
               </p>
-              <p className="text-[var(--text-muted)] mt-0.5 leading-tight">
-                Live catalog metrics, stock movements, and alerts are fully open for grading and review. Sign in as <strong>Admin</strong> or <strong>Accountant</strong> to reveal unmasked financial reserves and ledger modification actions.
+              <p className="text-[var(--text-muted)] mt-0.5 leading-normal max-w-2xl">
+                Live catalog metrics, stock movements, and alerts are fully open for grading and review. Sign in as <strong className="text-[var(--text-secondary)]">Admin</strong> or <strong className="text-[var(--text-secondary)]">Accountant</strong> to reveal unmasked financial reserves and ledger modification actions.
               </p>
             </div>
           </div>
           <Link to="/login" className="shrink-0">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--badge-border)] border-[var(--border-subtle)] text-[var(--accent)] font-bold hover:shadow-xs transition-all cursor-pointer">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--accent-soft)] border border-[var(--badge-border)] text-[var(--badge-text)] font-bold hover:brightness-110 transition-all cursor-pointer">
               <Unlock className="w-3.5 h-3.5" />
               <span>Sign In to Unlock Staff Tools</span>
             </span>
@@ -273,10 +273,10 @@ export default function OverviewPage({ showToast = () => {} }) {
       ) : (
         <motion.div
           variants={itemVariants}
-          className="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300"
+          className="p-3.5 rounded-2xl bg-emerald-500/8 border border-emerald-500/25 flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-300"
         >
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <ShieldCheck className="w-4 h-4" />
             <span>
               <strong>Authenticated Console:</strong> Live operational metrics synchronizing directly with relational database.
             </span>
@@ -293,35 +293,36 @@ export default function OverviewPage({ showToast = () => {} }) {
         {/* KPI 1: Inventory Valuation */}
         <KpiCard
           title="Inventory Valuation"
-          value={loading ? "â€”" : formatCurrency(kpis.total_valuation, currency)}
+          value={loading ? "—" : formatCurrency(kpis.total_valuation, currency)}
           subtitle={`${formatNumber(kpis.total_items)} active SKUs in catalog`}
           icon={Package}
+          variant="primary"
         />
 
         {/* KPI 2: Low Stock Alerts */}
         <KpiCard
           title="Low Stock Items"
-          value={loading ? "â€”" : formatNumber(kpis.low_stock_count)}
+          value={loading ? "—" : formatNumber(kpis.low_stock_count)}
           subtitle={
             kpis.critical_count > 0
               ? `${kpis.critical_count} critical out of stock`
               : "Items at or below reorder limit"
           }
           icon={AlertTriangle}
-          variant={kpis.low_stock_count > 0 ? "warning" : "default"}
+          variant={kpis.low_stock_count > 0 ? "warning" : "success"}
         />
 
         {/* KPI 3: Expiring Soon */}
         <KpiCard
           title="Expiring Within 30 Days"
-          value={loading ? "â€”" : formatNumber(kpis.expiring_soon_count || 0)}
+          value={loading ? "—" : formatNumber(kpis.expiring_soon_count || 0)}
           subtitle={
             kpis.expired_count > 0
-              ? `${kpis.expired_count} items already expired`
+              ? `${kpis.expired_count} item${kpis.expired_count === 1 ? "" : "s"} already expired`
               : "Quality & shelf-life safety check"
           }
           icon={Clock}
-          variant={(kpis.expiring_soon_count || 0) > 0 ? "warning" : "default"}
+          variant={(kpis.expiring_soon_count || 0) > 0 ? "warning" : "info"}
         />
 
         {/* KPI 4: Net Position / Finance (Role-Aware) */}
@@ -329,31 +330,25 @@ export default function OverviewPage({ showToast = () => {} }) {
           <KpiCard
             title="Net Financial Position"
             value={formatCurrency(finance.net_position, currency)}
-            subtitle={`Income ${formatCurrency(finance.cash_income, currency)} Â· Exp ${formatCurrency(finance.expenses, currency)}`}
+            subtitle={`Income ${formatCurrency(finance.cash_income, currency)} · Exp ${formatCurrency(finance.expenses, currency)}`}
             icon={Coins}
             variant={finance.net_position >= 0 ? "success" : "danger"}
           />
         ) : (
-          <Card className="p-5 space-y-2 border border-[var(--border-subtle)]">
-            <div className="flex items-center justify-between text-[var(--text-muted)]">
-              <span className="text-xs font-bold uppercase tracking-wider">Net Reserve Position</span>
-              <div className="p-1.5 rounded-lg bg-[var(--badge-bg)] text-[var(--accent)] dark:bg-[var(--badge-bg)] dark:text-[var(--accent)]">
-                <Coins className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xl font-extrabold text-[var(--text-primary)] tabular-nums">
-                â‚¹8,75,000
+          <KpiCard
+            title="Net Reserve Position"
+            value="₹ — / ₹ —"
+            subtitle="Sign in as Accountant to reveal unmasked financial vouchers"
+            icon={Coins}
+            variant="primary"
+            progress={0}
+            footer={
+              <span className="inline-flex items-center gap-1 font-bold">
+                <Lock className="w-3 h-3" />
+                Accountant View
               </span>
-              <span className="text-[10px] text-[var(--text-dim)] bg-[var(--bg-surface)] dark:bg-[var(--bg-surface-elev)] px-1.5 py-0.5 rounded-md flex items-center gap-1">
-                <Lock className="w-3 h-3 text-[var(--text-dim)]" />
-                <span>Accountant View</span>
-              </span>
-            </div>
-            <p className="text-[11px] text-[var(--text-dim)]">
-              Sign in as Accountant to reveal unmasked financial vouchers
-            </p>
-          </Card>
+            }
+          />
         )}
       </motion.div>
 

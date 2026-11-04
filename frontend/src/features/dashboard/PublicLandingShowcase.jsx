@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -177,7 +177,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[var(--badge-bg)]/90 dark:bg-[var(--badge-bg)] border border-[var(--badge-border)]/80 dark:border-blue-900/50 text-[var(--accent)] dark:text-[var(--badge-text)] shadow-xs backdrop-blur-xs"
         >
           <Sparkles className="w-3.5 h-3.5 text-[var(--accent)] animate-pulse" />
-          <span>Next-Gen Resource Logistics OS Â· Live Interactive Sandbox</span>
+          <span>Next-Gen Resource Logistics OS · Live Interactive Sandbox</span>
         </motion.div>
 
         {/* Hero Title */}
@@ -199,7 +199,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
             .
           </h1>
           <p className="text-sm sm:text-base lg:text-lg text-[var(--text-muted)] dark:text-[var(--text-dim)] max-w-2xl mx-auto font-normal leading-relaxed">
-            Gain complete real-time visibility over inventory turnover, relief disbursements, donor grants, and automated reorder safety thresholds â€” with zero setup required.
+            Gain complete real-time visibility over inventory turnover, relief disbursements, donor grants, and automated reorder safety thresholds — with zero setup required.
           </p>
         </motion.div>
 
@@ -376,7 +376,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
                 <Coins className="w-4 h-4 text-emerald-600" />
               </div>
               <div className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] tabular-nums pt-1">
-                {isNGO ? "â‚¹3,23,000.00" : "â‚¹3,66,000.00"}
+                {isNGO ? "₹3,23,000.00" : "₹3,66,000.00"}
               </div>
               <div className="mt-2.5 text-xs text-[var(--text-muted)] flex items-center justify-between border-t border-[var(--border-subtle)] pt-2">
                 <span>{isNGO ? "24 Medical & Aid SKUs" : "28 Retail Grocery SKUs"}</span>
@@ -650,7 +650,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
                 onClick={() => setActiveTab("alerts")}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "alerts"
-                    ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] shadow-2xs"
+                    ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
@@ -663,7 +663,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
                 onClick={() => setActiveTab("ledger")}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "ledger"
-                    ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] shadow-2xs"
+                    ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
@@ -736,7 +736,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
                           {m.item}
                         </span>
                         <span className="text-[11px] text-[var(--text-dim)] hidden sm:inline">
-                          â€” {m.note}
+                          ' {m.note}
                         </span>
                       </div>
                     </div>
@@ -792,7 +792,7 @@ export default function PublicLandingShowcase({ onDownloadReport, showToast = ()
                 1-Click Boardroom Audits
               </h3>
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                Export comprehensive UTF-8 BOM CSVs and formal ReportLab PDF documents with rupee (â‚¹) currency support.
+                Export comprehensive UTF-8 BOM CSVs and formal ReportLab PDF documents with rupee (₹) currency support.
               </p>
             </Card>
           </motion.div>

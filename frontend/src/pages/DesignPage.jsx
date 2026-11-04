@@ -140,7 +140,7 @@ export default function DesignPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <KpiCard title="Catalog SKUs" value="124" subtitle="Active items tracked" trend="Live Synced" />
           <KpiCard title="Low Stock" value={3} subtitle="Requires restock" trend="Action Needed" />
-          <KpiCard title="Stock Value" value="â‚¹1,24,500.00" subtitle="Combined inventory value" />
+          <KpiCard title="Stock Value" value="₹1,24,500.00" subtitle="Combined inventory value" />
         </div>
       </section>
 

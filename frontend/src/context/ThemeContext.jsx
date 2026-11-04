@@ -9,7 +9,7 @@ export function ThemeProvider({ children }) {
     } catch {
       // ignore
     }
-    return "light";
+    return "dark";
   });
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-﻿import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, Info, Award, Users, BookOpen, Layers, Sparkles } from "lucide-react";
 
 export default function AboutModal({ isOpen, onClose }) {
@@ -37,7 +37,7 @@ export default function AboutModal({ isOpen, onClose }) {
                     Smart Inventory & Resource Operations Architecture
                   </p>
                   <p className="text-[10px] font-mono text-[var(--text-dim)] mt-0.5">
-                    Version 1.0.0 Â· Production Ready
+                    Version 1.0.0 · Production Ready
                   </p>
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function AboutModal({ isOpen, onClose }) {
             <div className="mt-5 pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs text-[var(--text-dim)]">
               <span className="flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
-                K.R. Mangalam University Â· B.Tech CSE Minor Project
+                K.R. Mangalam University · B.Tech CSE Minor Project
               </span>
               <button
                 type="button"

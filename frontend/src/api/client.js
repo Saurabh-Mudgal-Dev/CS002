@@ -24,6 +24,55 @@ let localLogs = [
 
 let backendActive = false;
 
+/**
+ * Normalize a backend item record into the shape the UI expects.
+ * Maps new API fields (quantity_on_hand, org_id, in_stock/low/out_of_stock)
+ * to the legacy UI contract (quantity, context_tag, In Stock/Low Stock/Critical).
+ */
+function normalizeInventoryItem(raw) {
+  if (!raw || typeof raw !== "object") return raw;
+
+  const sku = String(raw.sku || "");
+  const qty = Number(raw.quantity_on_hand ?? raw.quantity ?? 0);
+  const reorder = Number(raw.reorder_level ?? 0);
+
+  const statusMap = {
+    in_stock: "In Stock",
+    ok: "In Stock",
+    low: "Low Stock",
+    out_of_stock: "Critical",
+    critical: "Critical",
+  };
+  const mapped = statusMap[String(raw.status || "").toLowerCase()];
+  // Derive status from live values if the API did not provide a recognized one
+  const status =
+    mapped ||
+    (raw.status && ["In Stock", "Low Stock", "Critical"].includes(raw.status)
+      ? raw.status
+      : qty <= 0
+        ? "Critical"
+        : qty <= reorder
+          ? "Low Stock"
+          : "In Stock");
+
+  const skuTaggedRetail = /^(RTL|RET)-/.test(sku);
+  const contextTag =
+    raw.context_tag ||
+    (skuTaggedRetail ? "retail" : raw.org_id != null ? (raw.org_id === 1 ? "ngo" : "retail") : "general");
+
+  return {
+    ...raw,
+    quantity: raw.quantity != null ? Number(raw.quantity) : qty,
+    reorder_level: reorder,
+    // Relief goods carry no sale price — fall back to assessed cost so
+    // the catalog shows the same valuation as the dashboard.
+    unit_price: Number(raw.unit_price ?? 0) || Number(raw.unit_cost ?? 0),
+    unit_cost: Number(raw.unit_cost ?? 0),
+    status,
+    context_tag: contextTag,
+  };
+}
+
 export async function checkBackendHealth() {
   try {
     const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(2000) });
@@ -52,7 +101,8 @@ export async function getInventory(params = {}) {
     const res = await fetch(`${API_BASE}/inventory?${query.toString()}`, { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       backendActive = true;
-      return await res.json();
+      const data = await res.json();
+      return Array.isArray(data) ? data.map(normalizeInventoryItem) : data;
     }
   } catch {
     backendActive = false;

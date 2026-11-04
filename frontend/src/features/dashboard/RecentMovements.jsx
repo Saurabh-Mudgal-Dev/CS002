@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { History, ArrowRight } from "lucide-react";
 import Card from "../../components/ui/Card";
 import Badge from "../../components/ui/Badge";
@@ -23,11 +23,13 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
   };
 
   return (
-    <Card className="p-5 sm:p-6 border border-[var(--border-subtle)] space-y-4">
+    <Card className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <History className="w-4 h-4 text-[var(--accent)]" />
-          <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-[var(--accent-soft)] text-[var(--accent)] shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <History className="w-5 h-5" />
+          </div>
+          <h2 className="text-sm sm:text-base font-bold text-[var(--text-primary)] tracking-tight">
             Recent Stock Movements
           </h2>
         </div>
@@ -86,7 +88,7 @@ export default function RecentMovements({ movements = [], currency = "INR" }) {
                       </span>
                     </td>
                     <td className="py-2.5 text-right text-[var(--text-muted)] tabular-nums">
-                      {m.total_value ? formatCurrency(m.total_value, currency) : "â€”"}
+                      {m.total_value ? formatCurrency(m.total_value, currency) : "—"}
                     </td>
                     <td className="py-2.5 text-right text-[var(--text-dim)] truncate max-w-[100px]">
                       {m.actor_name || "System"}

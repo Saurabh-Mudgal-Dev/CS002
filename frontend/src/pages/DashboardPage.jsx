@@ -177,7 +177,7 @@ export default function DashboardPage({
                 </span>
               </div>
               <p className="text-sm font-bold mt-0.5" style={{ color: "var(--text-primary)" }}>
-                {urgentItem.name} â€” Only{" "}
+                {urgentItem.name} ' Only{" "}
                 <span className="text-amber-500 font-extrabold">{urgentItem.quantity} units</span>{" "}
                 remaining (safety threshold: {urgentItem.reorder_level})
               </p>
@@ -209,7 +209,7 @@ export default function DashboardPage({
             <div>
               <h3 className="font-extrabold text-sm flex items-center gap-2" style={{ color: "var(--text-primary)" }}>
                 <TrendingUp className="w-4 h-4" style={{ color: "var(--accent)" }} />
-                Operational Velocity â€” Last 7 Days
+                Operational Velocity ' Last 7 Days
               </h3>
               <p className="text-[11px] mt-0.5" style={{ color: "var(--text-muted)" }}>
                 Intake (Restocks) vs. Outflow ({isNGO ? "Aid Dispatches" : "Customer Sales"})

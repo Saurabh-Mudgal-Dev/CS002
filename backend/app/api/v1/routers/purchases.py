@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, Request, status
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
@@ -7,8 +7,9 @@ from app.database import get_db
 from app.models.finance import Purchase
 from app.models.inventory import InventoryItem
 from app.models.user import User
+from app.models.organization import Organization
 from app.schemas.finance import PurchaseCreate, PurchaseOut
-from app.core.deps import require_roles
+from app.core.deps import require_roles, get_optional_user
 from app.services.finance import create_purchase_record
 
 router = APIRouter(prefix="/purchases", tags=["Purchases"])
@@ -18,11 +19,23 @@ router = APIRouter(prefix="/purchases", tags=["Purchases"])
 def list_purchases(
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    current_user: User = Depends(require_roles("admin", "manager", "accountant")),
+    org_type: Optional[str] = Query("ngo"),
+    current_user: Optional[User] = Depends(get_optional_user),
     db: Session = Depends(get_db)
 ):
+    """
+    List purchases.
+    Unauthenticated visitors can browse procurement logs in read-only mode;
+    Authenticated users view purchases for their scoped organization.
+    """
+    if current_user:
+        target_org_id = current_user.org_id
+    else:
+        org = db.query(Organization).filter(Organization.org_type == org_type).first()
+        target_org_id = org.id if org else 1
+
     purchases = db.query(Purchase).filter(
-        Purchase.org_id == current_user.org_id
+        Purchase.org_id == target_org_id
     ).order_by(desc(Purchase.purchase_date), desc(Purchase.id)).offset(offset).limit(limit).all()
 
     results = []

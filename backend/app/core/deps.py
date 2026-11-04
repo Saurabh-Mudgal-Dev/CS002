@@ -64,6 +64,36 @@ def get_current_user(
     return user
 
 
+def get_optional_user(
+    token: Optional[str] = Depends(get_token_from_request),
+    db: Session = Depends(get_db)
+) -> Optional[User]:
+    """
+    Returns the authenticated User if valid credentials/cookie are provided,
+    or None if request is unauthenticated. Does NOT raise 401.
+    """
+    if not token:
+        return None
+
+    payload = decode_access_token(token)
+    if not payload:
+        return None
+
+    user_id_str = payload.get("sub")
+    if not user_id_str:
+        return None
+
+    try:
+        user_id = int(user_id_str)
+        user = db.query(User).filter(User.id == user_id).first()
+        if user and user.is_active:
+            return user
+    except Exception:
+        pass
+
+    return None
+
+
 def require_roles(*allowed_roles: str):
     def role_checker(current_user: User = Depends(get_current_user)) -> User:
         normalized_allowed = [r.lower() for r in allowed_roles]

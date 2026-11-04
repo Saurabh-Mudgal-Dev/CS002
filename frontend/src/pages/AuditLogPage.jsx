@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../features/auth/useAuth";
 import { api } from "../lib/api";
@@ -230,7 +230,7 @@ export default function AuditLogPage({ contextMode = "ngo", userRole = "Guest", 
               onClick={() => setActionFilter(c.key)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap border ${
                 actionFilter === c.key
-                  ? "bg-[var(--bg-surface-elev)] text-white dark:bg-[var(--accent)] border-[var(--border-subtle)] dark:border-[var(--border-hot)] shadow-xs"
+                  ? "bg-[var(--accent-solid)] text-white border-[var(--accent-solid)] shadow-[0_5px_16px_-5px_rgba(124,58,237,0.7)]"
                   : "bg-[var(--bg-surface-elev)] border-[var(--border-subtle)] text-[var(--text-secondary)] dark:text-[var(--text-dim)] hover:bg-[var(--row-hover)]"
               }`}
             >
@@ -295,7 +295,7 @@ export default function AuditLogPage({ contextMode = "ngo", userRole = "Guest", 
                             {isPositive ? `+${log.quantity_delta}` : log.quantity_delta}
                           </span>
                         ) : (
-                          <span className="text-[var(--text-dim)]">â€”</span>
+                          <span className="text-[var(--text-dim)]">'</span>
                         )}
                       </td>
 

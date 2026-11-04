@@ -1,23 +1,23 @@
 const base =
-  "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none";
+  "inline-flex items-center justify-center gap-2 font-semibold tracking-tight transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)] disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none active:scale-[0.985]";
 
 const sizes = {
   sm: "px-3 py-1.5 text-xs rounded-xl",
-  md: "px-4 py-2 text-xs sm:text-sm rounded-xl",
+  md: "px-4 py-2 text-xs sm:text-[13px] rounded-xl",
   lg: "px-5 py-2.5 text-sm sm:text-base rounded-xl font-semibold",
 };
 
 const variants = {
   primary:
-    "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] shadow-xs hover:shadow-sm border border-transparent",
+    "bg-accent-gradient text-white shadow-[0_6px_20px_-6px_rgba(124,58,237,0.55)] hover:shadow-[0_8px_26px_-6px_rgba(124,58,237,0.65)] hover:brightness-110 border border-transparent",
   gradient:
-    "bg-[var(--accent-gradient)] text-white shadow-xs hover:shadow-md border border-transparent",
+    "bg-accent-gradient text-white shadow-[0_6px_20px_-6px_rgba(124,58,237,0.55)] hover:shadow-[0_8px_26px_-6px_rgba(124,58,237,0.65)] hover:brightness-110 border border-transparent",
   secondary:
-    "bg-[var(--bg-surface-elev)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-[var(--row-hover)] hover:text-[var(--text-primary)] shadow-2xs",
+    "bg-[var(--bg-card-base)] text-[var(--text-secondary)] border border-[var(--border-mid)] hover:bg-[var(--row-hover)] hover:border-[var(--border-hot)] hover:text-[var(--text-primary)]",
   ghost:
     "bg-transparent text-[var(--text-muted)] hover:bg-[var(--row-hover)] hover:text-[var(--text-primary)] border border-transparent",
   danger:
-    "bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/50 dark:border-rose-900/40 text-rose-700 dark:text-rose-400 hover:bg-rose-100/80 dark:hover:bg-rose-900/50",
+    "border border-rose-500/25 bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/40",
 };
 
 export default function Button({

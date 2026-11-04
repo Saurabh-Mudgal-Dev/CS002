@@ -111,3 +111,41 @@ def test_reports_endpoints(client):
     assert pdf_res.status_code == 200
     assert pdf_res.headers["content-type"] == "application/pdf"
     assert pdf_res.content.startswith(b"%PDF-")
+
+
+def test_guest_public_access_endpoints(client):
+    """Verify that unauthenticated guests have full view access across all key endpoints."""
+    # Finance Summary
+    res_summary = client.get("/api/v1/finance/summary?org_type=ngo")
+    assert res_summary.status_code == 200
+    assert "net_position" in res_summary.json()
+
+    # Donations list
+    res_donations = client.get("/api/v1/donations?org_type=ngo")
+    assert res_donations.status_code == 200
+    assert isinstance(res_donations.json(), list)
+
+    # Purchases list
+    res_purchases = client.get("/api/v1/purchases?org_type=ngo")
+    assert res_purchases.status_code == 200
+    assert isinstance(res_purchases.json(), list)
+
+    # Expenses list
+    res_expenses = client.get("/api/v1/expenses?org_type=ngo")
+    assert res_expenses.status_code == 200
+    assert isinstance(res_expenses.json(), list)
+
+    # Users list
+    res_users = client.get("/api/v1/users?org_type=ngo")
+    assert res_users.status_code == 200
+    assert isinstance(res_users.json(), list)
+
+    # Reports also accessible to guests
+    res_inv_csv = client.get("/api/v1/reports/inventory.csv?org_type=ngo")
+    assert res_inv_csv.status_code == 200
+
+    res_fin_csv = client.get("/api/v1/reports/finance.csv?org_type=ngo")
+    assert res_fin_csv.status_code == 200
+
+    res_pdf = client.get("/api/v1/reports/report.pdf?org_type=ngo")
+    assert res_pdf.status_code == 200
